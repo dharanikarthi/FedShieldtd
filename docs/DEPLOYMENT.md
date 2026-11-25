@@ -42,6 +42,37 @@ Produce them with the pipeline in the README (or the Kaggle notebook), then make
 - **Laptop + tunnel** (quickest for a live demo): `uvicorn fedshield.api.server:app --port 8000`,
   then `cloudflared tunnel --url http://localhost:8000` (or ngrok). Put the tunnel URL in `VITE_API_BASE`.
 
+### Render, step by step (what goes where)
+
+You do **not** need the 15.9 GB `work/` folder. Nearly all of it is raw transaction shards and feature-extraction intermediates.
+The API needs a 143 MB bundle:
+
+| File (inside the bundle) | Size | Used for |
+|---|---|---|
+| `work/models/nfpc_full.pkl` | 1 MB | federated model and threshold |
+| `work/models/nfpc_full_features.parquet` | 56 MB | features for explanations and the live pipeline |
+| `work/models/nfpc_full_scores.parquet` | 2 MB | scores, banks, splits |
+| `work/models/nfpc_full_local*.parquet/.pkl` | 4 MB | each bank's local-only model (before/after demo) |
+| `work/models/stream.pkl`, `stream_events.parquet` | 1 MB | live stream |
+| `work/nfpc/monthly_full.parquet` | 9 MB | account timelines (trimmed to test accounts) |
+| `work/nfpc/edges_full.parquet` | 79 MB | money-flow graph (trimmed) |
+| `work/rbi_clusters.json`, `patterns.json`, `demo_cases.json` | <1 MB | RBI view, pattern library, watch list |
+
+1. `python scripts/make_deploy_bundle.py` writes `deploy/fedshield_work.zip`.
+2. Upload the zip somewhere that serves a **direct download** link:
+   - **Dropbox:** share the file and change `?dl=0` to `?dl=1`.
+   - **GitHub Release asset:** only if the data can be public.
+   - **S3 or R2 presigned URL.**
+   - Avoid Google Drive: files over 100 MB get a confirmation page instead of the file.
+3. In Render, choose **New → Blueprint** and pick this repo (`render.yaml`), or create a Docker web service with `docker/Dockerfile.api`.
+4. Set `FEDSHIELD_BUNDLE_URL` to the link. On first request after each deploy, the API downloads and unpacks it (about 20 s).
+   Render's disk is ephemeral, so this repeats after each redeploy or restart.
+5. Choose a plan with at least 1 GB RAM. The free 512 MB plan runs out of memory during a live federation run.
+6. Point Vercel's `VITE_API_BASE` at the Render URL.
+
+Note: RBI cluster pseudonyms are computed when the bundle is built. To keep them identical to the runtime pseudonyms,
+build the bundle with the same `FEDSHIELD_SECRET` you set on Render.
+
 ## 3. Everything together (Docker Compose)
 
 ```bash

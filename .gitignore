@@ -24,3 +24,7 @@ ui/.vercel/
 
 # machine-specific root CAs for docker builds
 docker/certs/*.crt
+
+# deploy bundle (derived from competition data)
+deploy/
+*.zip

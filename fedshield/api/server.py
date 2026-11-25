@@ -28,9 +28,35 @@ AUDIT = WORK / "audit_log.jsonl"
 S = {}
 
 
+def _fetch_bundle():
+    """On hosts with an ephemeral disk (Render), pull the artefact bundle at first use.
+    FEDSHIELD_BUNDLE_URL = direct download URL of fedshield_work.zip (scripts/make_deploy_bundle.py)."""
+    import os
+    import urllib.request
+    import zipfile
+    url = os.environ.get("FEDSHIELD_BUNDLE_URL")
+    if not url or (WORK / "models" / f"nfpc_{MODE}.pkl").exists():
+        return
+    tmp = WORK.parent / "_bundle.zip"
+    print(f"downloading artefact bundle ...", flush=True)
+    urllib.request.urlretrieve(url, tmp)
+    with zipfile.ZipFile(tmp) as z:
+        for m in z.namelist():                     # bundle layout: work/..., results/...
+            top, _, rest = m.partition("/")
+            if not rest or m.endswith("/"):
+                continue
+            dest = (WORK if top == "work" else RESULTS) / rest
+            dest.parent.mkdir(parents=True, exist_ok=True)
+            with z.open(m) as src, open(dest, "wb") as out:
+                out.write(src.read())
+    tmp.unlink()
+    print("bundle ready", flush=True)
+
+
 def _load():
     if S:
         return S
+    _fetch_bundle()
     mdir = WORK / "models"
     with open(mdir / f"nfpc_{MODE}.pkl", "rb") as fh:
         art = pickle.load(fh)
@@ -405,8 +431,12 @@ def rbi_overview(sess=Depends(session)):
     need(sess, "rbi", "admin")
     s = _load()
     if "clusters" not in s:
-        from fedshield.api.supervisor import clusters
-        s["clusters"] = clusters(s["scores"], s["art"]["bank_names"], s["art"]["threshold"])
+        cached = WORK / "rbi_clusters.json"           # precomputed by scripts/make_deploy_bundle.py
+        if cached.exists():
+            s["clusters"] = json.loads(cached.read_text())
+        else:
+            from fedshield.api.supervisor import clusters
+            s["clusters"] = clusters(s["scores"], s["art"]["bank_names"], s["art"]["threshold"])
     sc, thr, names = s["scores"], s["art"]["threshold"], s["art"]["bank_names"]
     te = sc[sc["split"] == "test"]
     per_bank = {n: {"accounts": int((te["bank"] == i).sum()), "alerts": int(((te["bank"] == i) & (te["score"] >= thr)).sum())}
