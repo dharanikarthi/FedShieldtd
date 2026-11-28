@@ -4,14 +4,14 @@ const TIER: Record<string, { c: string; icon: string; label: string }> = {
   "BLOCK-REVIEW": { c: "#d03b3b", icon: "⛔", label: "Block · review" },
   "HOLD-REVIEW": { c: "#ec835a", icon: "▲", label: "Hold · review" },
   MONITOR: { c: "#fab219", icon: "●", label: "Monitor" },
-  CLEAR: { c: "#0ca30c", icon: "✓", label: "Clear" },
+  CLEAR: { c: "#12a150", icon: "✓", label: "Clear" },
   BLOCK: { c: "#d03b3b", icon: "⛔", label: "Block" },
   "STEP-UP": { c: "#ec835a", icon: "▲", label: "Step-up auth" },
-  ALLOW: { c: "#0ca30c", icon: "✓", label: "Allow" },
+  ALLOW: { c: "#12a150", icon: "✓", label: "Allow" },
 };
 
 export function Tier({ tier }: { tier: string }) {
-  const t = TIER[tier] ?? { c: "#898781", icon: "•", label: tier };
+  const t = TIER[tier] ?? { c: "var(--c-muted)", icon: "•", label: tier };
   return (
     <span className="inline-flex items-center gap-1.5 text-xs whitespace-nowrap text-ink-2">
       <span style={{ color: t.c }} aria-hidden>{t.icon}</span>{t.label}
@@ -71,9 +71,9 @@ export function Legend({ items }: { items: { label: string; color: string; dash?
 }
 
 export const tooltipStyle = {
-  contentStyle: { background: "#232321", border: "1px solid #383835", borderRadius: 8, fontSize: 12, color: "#f0efec" },
-  labelStyle: { color: "#c3c2b7" },
-  itemStyle: { color: "#f0efec" },
-  cursor: { fill: "rgba(255,255,255,0.04)", stroke: "#383835" },
+  contentStyle: { background: "var(--c-raised)", border: "1px solid var(--c-axis)", borderRadius: 8, fontSize: 12, color: "var(--c-ink)" },
+  labelStyle: { color: "var(--c-ink-2)" },
+  itemStyle: { color: "var(--c-ink)" },
+  cursor: { fill: "rgb(var(--ink) / 0.04)", stroke: "var(--c-axis)" },
 };
-export const axis = { stroke: "#383835", tick: { fill: "#898781", fontSize: 11 }, tickLine: false };
+export const axis = { stroke: "var(--c-axis)", tick: { fill: "var(--c-muted)", fontSize: 11 }, tickLine: false };

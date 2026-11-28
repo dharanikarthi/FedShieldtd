@@ -2,11 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { color-scheme: dark; }
+/* Design tokens. Light = default (institutional); dark via [data-theme="dark"].
+   Channel vars feed Tailwind (alpha support); --c-* are full colours for inline/SVG use. */
+:root {
+  color-scheme: light;
+  --page: 246 247 249; --surface: 255 255 255; --raised: 240 242 245; --line: 228 231 236; --axis: 208 213 221;
+  --ink: 16 24 40; --ink-2: 71 84 103; --ink-muted: 114 126 145;
+  --brand: 30 64 175;
+  --c-page: rgb(var(--page)); --c-surface: rgb(var(--surface)); --c-raised: rgb(var(--raised));
+  --c-line: rgb(var(--line)); --c-axis: rgb(var(--axis)); --c-ink: rgb(var(--ink));
+  --c-ink-2: rgb(var(--ink-2)); --c-muted: rgb(var(--ink-muted)); --c-brand: rgb(var(--brand));
+  --shadow: 0 1px 2px rgba(16,24,40,.05), 0 1px 3px rgba(16,24,40,.06);
+}
+[data-theme="dark"] {
+  color-scheme: dark;
+  --page: 13 13 13; --surface: 26 26 25; --raised: 35 35 33; --line: 44 44 42; --axis: 56 56 53;
+  --ink: 240 239 236; --ink-2: 195 194 183; --ink-muted: 137 135 129;
+  --brand: 96 140 230;
+  --shadow: none;
+}
 body { @apply bg-page text-ink font-sans antialiased; font-variant-numeric: tabular-nums; }
-.card { @apply bg-surface border border-line rounded-xl; }
-.label { @apply text-[11px] uppercase tracking-wider text-ink-muted; }
-.btn { @apply px-3 py-1.5 rounded-md text-sm border border-axis hover:bg-raised transition-colors; }
+.card { @apply bg-surface border border-line rounded-xl; box-shadow: var(--shadow); }
+.label { @apply text-[11px] uppercase tracking-wider text-ink-muted font-medium; }
+.btn { @apply px-3 py-1.5 rounded-md text-sm border border-axis bg-surface text-ink hover:bg-raised transition-colors; }
+.btn-primary { @apply px-3 py-1.5 rounded-md text-sm font-medium text-white bg-brand hover:opacity-90 transition-opacity; }
 table.data th { @apply text-left text-[11px] uppercase tracking-wider text-ink-muted font-medium px-3 py-2 border-b border-line; }
 table.data td { @apply px-3 py-2 border-b border-line text-sm; }
-.sel { @apply bg-raised border border-axis rounded-md px-2 py-1.5 text-sm text-ink; }
+.sel { @apply bg-surface border border-axis rounded-md px-2 py-1.5 text-sm text-ink; }
+.nav-item { @apply flex items-center gap-2.5 px-3 py-2 rounded-md text-sm text-ink-2 hover:bg-raised hover:text-ink transition-colors; }
+.nav-item.active { @apply bg-brand/10 text-brand font-medium; }
+
+/* grid/flex children must be allowed to shrink, or charts force horizontal scroll on phones */
+.grid > * { min-width: 0; }
+html, body { overflow-x: hidden; }

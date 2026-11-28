@@ -16,20 +16,20 @@ function Comparison({ title, sub, block }: { title: string; sub: string; block: 
   const data = perBank(block);
   const cen = block?.summary?.central_overall_auprc;
   return (
-    <Section title={title} sub={sub} right={<Legend items={[{ label: "Local only", color: SERIES[1] }, { label: "FedShield", color: SERIES[0] }, { label: "Centralised ceiling", color: "#898781", dash: true }]} />}>
+    <Section title={title} sub={sub} right={<Legend items={[{ label: "Local only", color: SERIES[1] }, { label: "FedShield", color: SERIES[0] }, { label: "Centralised ceiling", color: "var(--c-muted)", dash: true }]} />}>
       <div className="h-64">
         <ResponsiveContainer>
           <BarChart data={data} margin={{ left: 0, right: 12, top: 18 }} barGap={2}>
-            <CartesianGrid stroke="#2c2c2a" vertical={false} />
+            <CartesianGrid stroke="var(--c-line)" vertical={false} />
             <XAxis dataKey="bank" {...axis} />
             <YAxis {...axis} width={40} tickFormatter={(v) => v.toFixed(2)} />
             <Tooltip {...tooltipStyle} formatter={(v: number) => v?.toFixed(4)} />
-            {cen != null && <ReferenceLine y={cen} stroke="#898781" strokeDasharray="4 4" />}
+            {cen != null && <ReferenceLine y={cen} stroke="var(--c-muted)" strokeDasharray="4 4" />}
             <Bar dataKey="local" name="Local only" fill={SERIES[1]} radius={[4, 4, 0, 0]} maxBarSize={36}>
-              <LabelList dataKey="local" position="top" formatter={(v: number) => v?.toFixed(3)} fill="#c3c2b7" fontSize={11} />
+              <LabelList dataKey="local" position="top" formatter={(v: number) => v?.toFixed(3)} fill="var(--c-ink-2)" fontSize={11} />
             </Bar>
             <Bar dataKey="fed" name="FedShield" fill={SERIES[0]} radius={[4, 4, 0, 0]} maxBarSize={36}>
-              <LabelList dataKey="fed" position="top" formatter={(v: number) => v?.toFixed(3)} fill="#c3c2b7" fontSize={11} />
+              <LabelList dataKey="fed" position="top" formatter={(v: number) => v?.toFixed(3)} fill="var(--c-ink-2)" fontSize={11} />
             </Bar>
           </BarChart>
         </ResponsiveContainer>

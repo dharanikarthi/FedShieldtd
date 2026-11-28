@@ -9,3 +9,5 @@ FedShield Outputs
 *.pdf
 benchmark.ipynb
 results/submission
+
+confidential/

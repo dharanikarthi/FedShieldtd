@@ -18,7 +18,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 
 from fedshield.api.auth import SCOPE, USERS, issue, mask_id, need, session
-from fedshield.api.reasons import explain
+from fedshield.api.reasons import explain, localise
 from fedshield.config import RESULTS, ROOT, WORK
 
 MODE = "full"
@@ -230,7 +230,7 @@ def _iso(v):
 
 
 @app.get("/api/accounts/{account_id}")
-def account(account_id: str, sess=Depends(session)):
+def account(account_id: str, lang: str = "en", sess=Depends(session)):
     s = _load()
     art = s["art"]
     row = s["scores"][s["scores"]["account_id"] == account_id]
@@ -250,6 +250,7 @@ def account(account_id: str, sess=Depends(session)):
     else:
         contrib = art["model"].contributions(x)[0]
         reasons, mitig = explain(art["features"], vals, contrib, s["medians"])
+    reasons, mitig = localise(reasons, mitig, lang)
     mon = s["monthly"][s["monthly"]["acct"] == acct].sort_values("month")
     reg = {f: vals[art["features"].index(f)] for f in art["features"] if f.startswith("reg_")}
     return {
@@ -385,6 +386,38 @@ def federation():
 def _patterns():
     p = WORK / "patterns.json"
     return json.loads(p.read_text()) if p.exists() else []
+
+
+@app.get("/api/simulator")
+def simulator():
+    """One real held-out mule per bank that the bank's own model missed and the federated model caught,
+    with both real scores. Account ids are hashed: the simulator is visible to every role."""
+    import hashlib
+    p = WORK / "demo_cases.json"
+    if not p.exists():
+        raise HTTPException(404, "demo cases not built")
+    cases = json.loads(p.read_text())["cases"]
+    pick = {}
+    for c in cases:
+        if c["bank"] not in pick and c["local_score"] < c["local_threshold"] and c["fed_score"] >= c["fed_threshold"]:
+            pick[c["bank"]] = c
+    hops = []
+    for b in sorted(pick):
+        c = pick[b]
+        hops.append({"bank": b, "account": "H-" + hashlib.sha256(c["account_id"].encode()).hexdigest()[:8],
+                     "local_score": round(c["local_score"], 3), "local_threshold": round(c["local_threshold"], 3),
+                     "fed_score": round(c["fed_score"], 3), "fed_threshold": round(c["fed_threshold"], 3),
+                     "typology": c.get("alert_reason")})
+    return {"hops": hops}
+
+
+@app.get("/api/theatre")
+def theatre():
+    """Pre-computed real training curves (experiments/theatre.py) for the animated story page."""
+    p = RESULTS / "theatre.json"
+    if not p.exists():
+        raise HTTPException(404, "run: python -m fedshield.experiments.theatre")
+    return json.loads(p.read_text())
 
 
 @app.get("/api/experiments")

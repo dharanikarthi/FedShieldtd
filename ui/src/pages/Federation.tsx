@@ -28,7 +28,7 @@ export default function Federation() {
               <span className="w-2.5 h-2.5 rounded-full" style={{ background: BANK_COLOR[b] }} />
               <h3 className="font-semibold">{b}</h3>
               <span className="ml-auto text-xs text-ink-2">
-                {g2[b]?.rejected ? <><span style={{ color: "#d03b3b" }}>✕</span> rejected</> : <><span style={{ color: "#0ca30c" }}>✓</span> accepted</>}
+                {g2[b]?.rejected ? <><span style={{ color: "#d03b3b" }}>✕</span> rejected</> : <><span style={{ color: "#12a150" }}>✓</span> accepted</>}
               </span>
             </div>
             <dl className="grid grid-cols-2 gap-y-1 text-sm mt-3">
@@ -46,12 +46,12 @@ export default function Federation() {
         right={<Legend items={banks.map((b) => ({ label: b, color: BANK_COLOR[b] }))} />}>
         <div className="h-60">
           <ResponsiveContainer>
-            <LineChart data={rounds} margin={{ left: 0, right: 16, top: 6 }}>
-              <CartesianGrid stroke="#2c2c2a" vertical={false} />
+            <LineChart data={rounds.filter((r: any) => banks.some((b: string) => r[`val_auprc_${b}`] != null))} margin={{ left: 0, right: 16, top: 6 }}>
+              <CartesianGrid stroke="var(--c-line)" vertical={false} />
               <XAxis dataKey="round" {...axis} />
               <YAxis {...axis} domain={["auto", "auto"]} tickFormatter={(v) => v.toFixed(2)} width={40} />
               <Tooltip {...tooltipStyle} formatter={(v: number) => v.toFixed(4)} />
-              {banks.map((b) => <Line key={b} dataKey={`val_auprc_${b}`} name={b} stroke={BANK_COLOR[b]} strokeWidth={2} dot={{ r: 4 }} />)}
+              {banks.map((b) => <Line key={b} dataKey={`val_auprc_${b}`} name={b} stroke={BANK_COLOR[b]} strokeWidth={2} dot={{ r: 4 }} connectNulls isAnimationActive={false} />)}
             </LineChart>
           </ResponsiveContainer>
         </div>

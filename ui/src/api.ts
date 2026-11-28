@@ -47,4 +47,7 @@ export const SERIES = ["#3987e5", "#d95926", "#199e70"];
 export const BANK_COLOR: Record<string, string> = { "Bank-A": SERIES[0], "Bank-B": SERIES[1], "Bank-C": SERIES[2] };
 // role accents: banks wear their series colour, aggregator neutral, RBI slot 5 (validated)
 export const ROLE_ACCENT = (s: Session | null) =>
-  !s ? "#898781" : s.role === "bank" ? BANK_COLOR[s.bank!] : s.role === "admin" ? "#f0efec" : "#d55181";
+  !s ? "var(--c-muted)" : s.role === "bank" ? BANK_COLOR[s.bank!] : s.role === "admin" ? "var(--c-ink)" : "#d55181";
+// Resolve a theme variable to a concrete colour (for libraries that can't read CSS vars, e.g. cytoscape)
+export const cssColor = (v: string) =>
+  v.replace(/var\((--[\w-]+)\)/g, (_, n) => getComputedStyle(document.documentElement).getPropertyValue(n).trim() || "#888");

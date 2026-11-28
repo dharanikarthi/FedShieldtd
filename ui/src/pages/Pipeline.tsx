@@ -3,7 +3,7 @@ import { CartesianGrid, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YA
 import { get, num, post, wsUrl } from "../api";
 import { Legend, Section, Stat, axis, tooltipStyle } from "../components/ui";
 
-// categorical slots, dark, validated (5 slots pass all six checks on #1a1a19)
+// categorical slots, dark, validated (5 slots pass all six checks on var(--c-surface))
 const PAL = ["#3987e5", "#d95926", "#199e70", "#c98500", "#d55181"];
 const STAGES = [
   ["load", "Load adapter"],
@@ -150,7 +150,7 @@ export default function Pipeline() {
           <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-auto" role="img" aria-label="Live federation topology">
             <defs>
               <radialGradient id="glow"><stop offset="0%" stopColor="#3987e5" stopOpacity="0.45" /><stop offset="100%" stopColor="#3987e5" stopOpacity="0" /></radialGradient>
-              <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#232321" strokeWidth="1" /></pattern>
+              <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="var(--c-raised)" strokeWidth="1" /></pattern>
             </defs>
             <rect width={W} height={H} fill="url(#grid)" />
             {/* links */}
@@ -158,21 +158,21 @@ export default function Pipeline() {
               const p = pos(i);
               const off = rejectedG2(b) || (lastG1?.rejected || []).includes(b);
               return <path key={b} id={`link-${b}`} d={`M${p.x + 70},${p.y} C${p.x + 230},${p.y} ${AGG.x - 200},${AGG.y} ${AGG.x - 60},${AGG.y}`}
-                fill="none" stroke={off ? "#d03b3b" : "#383835"} strokeWidth={2} strokeDasharray={off ? "5 6" : undefined} />;
+                fill="none" stroke={off ? "#d03b3b" : "var(--c-axis)"} strokeWidth={2} strokeDasharray={off ? "5 6" : undefined} />;
             })}
-            <path id="link-model" d={`M${AGG.x + 60},${AGG.y} L${MODEL.x - 64},${MODEL.y}`} stroke="#383835" strokeWidth={2} />
+            <path id="link-model" d={`M${AGG.x + 60},${AGG.y} L${MODEL.x - 64},${MODEL.y}`} stroke="var(--c-axis)" strokeWidth={2} />
 
             {/* packets in flight: masked histogram vectors */}
             {packets.map((k) => (
               <g key={k.id}>
-                <circle r={6} fill={color(k.bank)} stroke="#1a1a19" strokeWidth={2}>
+                <circle r={6} fill={color(k.bank)} stroke="var(--c-surface)" strokeWidth={2}>
                   <animateMotion dur="0.55s" fill="freeze" rotate="auto"><mpath href={`#link-${k.bank}`} /></animateMotion>
                   <animate attributeName="opacity" values="1;1;0" keyTimes="0;0.85;1" dur="0.6s" fill="freeze" />
                 </circle>
               </g>
             ))}
             {pulse > 0 && (
-              <circle key={`m${pulse}`} r={7} fill="#f0efec">
+              <circle key={`m${pulse}`} r={7} fill="var(--c-ink)">
                 <animateMotion dur="0.35s" fill="freeze"><mpath href="#link-model" /></animateMotion>
                 <animate attributeName="opacity" values="1;0" dur="0.4s" fill="freeze" />
               </circle>
@@ -185,11 +185,11 @@ export default function Pipeline() {
               const rej2 = rejectedG2(b), rej1 = (lastG1?.rejected || []).includes(b);
               return (
                 <g key={b} transform={`translate(${p.x - 70},${p.y - 30})`}>
-                  <rect width={140} height={60} rx={10} fill="#232321" stroke={rej2 || rej1 ? "#d03b3b" : color(b)} strokeWidth={2} />
+                  <rect width={140} height={60} rx={10} fill="var(--c-raised)" stroke={rej2 || rej1 ? "#d03b3b" : color(b)} strokeWidth={2} />
                   <rect width={6} height={60} rx={3} fill={color(b)} />
-                  <text x={16} y={20} fill="#f0efec" fontSize={13} fontWeight={600}>{b}</text>
-                  <text x={16} y={36} fill="#898781" fontSize={10.5}>{info ? `${info.rows.toLocaleString()} rows · ${info.positives} pos` : "…"}</text>
-                  <text x={16} y={51} fill={rej2 || rej1 ? "#ec835a" : "#c3c2b7"} fontSize={10.5}>
+                  <text x={16} y={20} fill="var(--c-ink)" fontSize={13} fontWeight={600}>{b}</text>
+                  <text x={16} y={36} fill="var(--c-muted)" fontSize={10.5}>{info ? `${info.rows.toLocaleString()} rows · ${info.positives} pos` : "…"}</text>
+                  <text x={16} y={51} fill={rej2 || rej1 ? "#ec835a" : "var(--c-ink-2)"} fontSize={10.5}>
                     {rej2 ? "✕ excluded · Gate 2" : rej1 ? "✕ dropped this tree · Gate 1" :
                       g2 ? `peer AUPRC ${num(g2.peer_auprc, 2)}${cos != null ? ` · cos ${num(cos, 2)}` : ""}` : "awaiting probe"}
                   </text>
@@ -201,11 +201,11 @@ export default function Pipeline() {
             {/* aggregator */}
             <circle cx={AGG.x} cy={AGG.y} r={95} fill="url(#glow)" opacity={stage === "sum" || stage === "histograms" ? 1 : 0.25} style={{ transition: "opacity .3s" }} />
             <g transform={`translate(${AGG.x - 60},${AGG.y - 48})`}>
-              <rect width={120} height={96} rx={14} fill="#1a1a19" stroke="#3987e5" strokeWidth={2} />
-              <text x={60} y={24} textAnchor="middle" fill="#f0efec" fontSize={12.5} fontWeight={600}>Aggregator</text>
-              <text x={60} y={40} textAnchor="middle" fill="#898781" fontSize={10}>sums masks · sees no rows</text>
+              <rect width={120} height={96} rx={14} fill="var(--c-surface)" stroke="#3987e5" strokeWidth={2} />
+              <text x={60} y={24} textAnchor="middle" fill="var(--c-ink)" fontSize={12.5} fontWeight={600}>Aggregator</text>
+              <text x={60} y={40} textAnchor="middle" fill="var(--c-muted)" fontSize={10}>sums masks · sees no rows</text>
               {(packets.slice(-3).map((k, j) => (
-                <text key={k.id} x={60} y={58 + j * 12} textAnchor="middle" fill="#c3c2b7" fontSize={9.5} fontFamily="ui-monospace,monospace">
+                <text key={k.id} x={60} y={58 + j * 12} textAnchor="middle" fill="var(--c-ink-2)" fontSize={9.5} fontFamily="ui-monospace,monospace">
                   {k.masked.slice(0, 4).map((v) => v.toString(16).padStart(5, "0")).join(" ")}
                 </text>
               )))}
@@ -213,16 +213,16 @@ export default function Pipeline() {
 
             {/* global model */}
             <g transform={`translate(${MODEL.x - 64},${MODEL.y - 70})`}>
-              <rect width={128} height={140} rx={14} fill="#1a1a19" stroke="#f0efec" strokeOpacity={0.5} strokeWidth={1.5} />
-              <text x={64} y={22} textAnchor="middle" fill="#f0efec" fontSize={12.5} fontWeight={600}>Global model</text>
-              <text x={64} y={52} textAnchor="middle" fill="#f0efec" fontSize={26} fontWeight={600}>{trees.length}</text>
-              <text x={64} y={67} textAnchor="middle" fill="#898781" fontSize={10}>of {setup?.n_trees ?? "—"} trees</text>
+              <rect width={128} height={140} rx={14} fill="var(--c-surface)" stroke="var(--c-ink)" strokeOpacity={0.5} strokeWidth={1.5} />
+              <text x={64} y={22} textAnchor="middle" fill="var(--c-ink)" fontSize={12.5} fontWeight={600}>Global model</text>
+              <text x={64} y={52} textAnchor="middle" fill="var(--c-ink)" fontSize={26} fontWeight={600}>{trees.length}</text>
+              <text x={64} y={67} textAnchor="middle" fill="var(--c-muted)" fontSize={10}>of {setup?.n_trees ?? "—"} trees</text>
               {/* forest glyph: one tick per tree */}
               {trees.slice(-40).map((t, j) => (
                 <rect key={t.round} x={10 + (j % 20) * 5.4} y={84 + Math.floor(j / 20) * 16} width={3.4} height={12} rx={1.5}
                   fill={(t.gate1_rejected || []).length ? "#ec835a" : "#3987e5"} />
               ))}
-              <text x={64} y={130} textAnchor="middle" fill="#c3c2b7" fontSize={10}>{trees[trees.length - 1]?.top_feature ?? ""}</text>
+              <text x={64} y={130} textAnchor="middle" fill="var(--c-ink-2)" fontSize={10}>{trees[trees.length - 1]?.top_feature ?? ""}</text>
             </g>
           </svg>
           <div className="absolute left-3 bottom-2 text-[11px] text-ink-muted">
@@ -276,16 +276,16 @@ export default function Pipeline() {
 
         <div className="col-span-12 lg:col-span-7">
           <Section title="Learning curve" sub="AUPRC as trees are added: global test set and each bank's validation set">
-            {banks.length > 1 && <Legend items={[{ label: "Global (test)", color: "#f0efec" }, ...banks.map((b) => ({ label: b, color: color(b), dash: true }))]} />}
+            {banks.length > 1 && <Legend items={[{ label: "Global (test)", color: "var(--c-ink)" }, ...banks.map((b) => ({ label: b, color: color(b), dash: true }))]} />}
             <div className="h-56">
               <ResponsiveContainer>
                 <LineChart data={curve} margin={{ top: 8, right: 16, bottom: 0, left: -8 }}>
-                  <CartesianGrid stroke="#2c2c2a" vertical={false} />
+                  <CartesianGrid stroke="var(--c-line)" vertical={false} />
                   <XAxis dataKey="round" {...axis} />
                   <YAxis domain={[0, 1]} {...axis} />
                   <Tooltip {...tooltipStyle} formatter={(v: number) => v.toFixed(3)} labelFormatter={(r) => `Tree ${r}`} />
                   {banks.map((b) => <Line key={b} dataKey={b} stroke={color(b)} strokeWidth={2} strokeDasharray="4 4" dot={false} isAnimationActive={false} />)}
-                  <Line dataKey="global" stroke="#f0efec" strokeWidth={2} dot={{ r: 4 }} isAnimationActive={false} />
+                  <Line dataKey="global" stroke="var(--c-ink)" strokeWidth={2} dot={{ r: 4 }} isAnimationActive={false} />
                 </LineChart>
               </ResponsiveContainer>
             </div>

@@ -1,7 +1,7 @@
 import cytoscape from "cytoscape";
 import { useEffect, useRef, useState } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { BANK_COLOR, get, pct } from "../api";
+import { BANK_COLOR, cssColor, get, pct } from "../api";
 import { Legend, Section, Stat, axis, tooltipStyle } from "../components/ui";
 
 const SRC_COLOR: Record<string, string> = { EFRM: "#3987e5", AML: "#d95926", I4C: "#199e70" };
@@ -79,11 +79,11 @@ export default function Supervisor() {
             <div className="h-48">
               <ResponsiveContainer>
                 <BarChart data={banks.map((b) => ({ bank: b, alerts: d.per_bank[b].alerts }))} margin={{ top: 8, right: 8, left: -12 }}>
-                  <CartesianGrid stroke="#2c2c2a" vertical={false} />
+                  <CartesianGrid stroke="var(--c-line)" vertical={false} />
                   <XAxis dataKey="bank" {...axis} />
                   <YAxis {...axis} />
                   <Tooltip {...tooltipStyle} />
-                  <Bar dataKey="alerts" radius={[4, 4, 0, 0]} maxBarSize={36} fill="#3987e5"
+                  <Bar dataKey="alerts" isAnimationActive={false} radius={[4, 4, 0, 0]} maxBarSize={36} fill="#3987e5"
                     shape={(p: any) => <rect x={p.x} y={p.y} width={p.width} height={p.height} rx={4} fill={BANK_COLOR[p.payload.bank]} />} />
                 </BarChart>
               </ResponsiveContainer>
@@ -127,13 +127,13 @@ function ClusterGraph({ c }: { c: any }) {
     const cy = cytoscape({
       container: ref.current,
       elements: [
-        ...c.members.map((m: any) => ({ data: { ...m, label: "", color: BANK_COLOR[m.bank] ?? "#898781" } })),
+        ...c.members.map((m: any) => ({ data: { ...m, label: "", color: BANK_COLOR[m.bank] ?? cssColor("var(--c-muted)") } })),
         ...c.links.filter((l: any) => ids.has(l.a) && ids.has(l.b)).map((l: any, i: number) => ({ data: { id: `l${i}`, source: l.a, target: l.b } })),
       ],
       style: [
-        { selector: "node", style: { "background-color": "data(color)", width: 14, height: 14, "border-width": 2, "border-color": "#1a1a19", color: "#c3c2b7", "font-size": 9, "text-valign": "bottom", "text-margin-y": 3 } },
+        { selector: "node", style: { "background-color": "data(color)", width: 14, height: 14, "border-width": 2, "border-color": cssColor("var(--c-surface)"), color: cssColor("var(--c-ink-2)"), "font-size": 9, "text-valign": "bottom", "text-margin-y": 3 } },
         { selector: 'node[status="confirmed"]', style: { shape: "triangle", width: 18, height: 18 } },
-        { selector: "edge", style: { width: 1.2, "line-color": "#383835", "curve-style": "haystack" } },
+        { selector: "edge", style: { width: 1.2, "line-color": cssColor("var(--c-axis)"), "curve-style": "haystack" } },
       ] as any,
       layout: { name: "cose", animate: false, nodeRepulsion: () => 6000, idealEdgeLength: () => 50 } as any,
       wheelSensitivity: 0.2,
