@@ -14,7 +14,7 @@ const GROUPS = [
 export default function Login({ theme, toggleTheme }: { theme: string; toggleTheme: () => void }) {
   const [ps, setPs] = useState<Persona[]>([]);
   const [sel, setSel] = useState<Persona | null>(null);
-  const [pw, setPw] = useState("fedshield");
+  const pw = "fedshield";   // demo credential; scope is enforced server-side per role
   const [err, setErr] = useState<string>();
   const [busy, setBusy] = useState(false);
   useEffect(() => { get<Persona[]>("/personas").then(setPs).catch((e) => setErr(String(e.message))); }, []);
@@ -107,17 +107,12 @@ export default function Login({ theme, toggleTheme }: { theme: string; toggleThe
                   <ul className="text-sm text-ink-2 space-y-1">{sel.scope.cannot.map((c) => <li key={c} className="flex gap-1.5"><Icon name="lock" size={14} className="text-ink-muted mt-0.5" />{c}</li>)}</ul>
                 </div>
               </div>
-              <div className="flex flex-wrap items-end gap-3 mt-5 pt-4 border-t border-line">
-                <label className="flex-1 min-w-[200px]">
-                  <span className="label">Password</span>
-                  <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} onKeyDown={(e) => e.key === "Enter" && go(sel)}
-                    className="sel w-full mt-1 outline-none focus:ring-2 focus:ring-brand/40" />
-                </label>
+              <div className="flex flex-wrap items-center gap-3 mt-5 pt-4 border-t border-line">
+                <span className="text-xs text-ink-muted flex-1 min-w-[200px]">Demo sign-in: one click. The server still enforces this role's scope on every request.</span>
                 <button className="btn-primary px-5 py-2 inline-flex items-center gap-1.5" disabled={busy} onClick={() => go(sel)}>
                   Sign in as {sel.name} <Icon name="arrow" size={14} />
                 </button>
               </div>
-              <div className="text-[11px] text-ink-muted mt-2">Demo password: fedshield</div>
               {err && <div className="text-xs text-critical mt-2">{err}</div>}
             </div>
           )}
