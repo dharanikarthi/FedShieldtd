@@ -44,7 +44,7 @@ def check(cond, msg):
 
 
 with sync_playwright() as p:
-    br = p.chromium.launch(channel="msedge", headless=True)
+    br = p.chromium.launch(channel=__import__("os").environ.get("UI_BROWSER", "msedge"), headless=True)
     for w, h, tag in ((1440, 1000, "desktop"), (390, 844, "phone")):
         ctx = br.new_context(viewport={"width": w, "height": h})
         page = ctx.new_page()
