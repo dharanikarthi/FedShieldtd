@@ -31,3 +31,8 @@ deploy/
 
 # confidential sample models / schemas: NEVER commit or deploy
 confidential/
+
+# large third-party datasets: never commit
+Dataset_*/
+*.bz2
+*.csv
