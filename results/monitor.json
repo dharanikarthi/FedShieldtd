@@ -1,0 +1,232 @@
+{
+ "calibration": {
+  "bands": [
+   {
+    "band": "0-10%",
+    "n": 17766,
+    "predicted": 0.0284,
+    "observed": 0.0031
+   },
+   {
+    "band": "10-20%",
+    "n": 518,
+    "predicted": 0.1345,
+    "observed": 0.0135
+   },
+   {
+    "band": "20-30%",
+    "n": 138,
+    "predicted": 0.241,
+    "observed": 0.0362
+   },
+   {
+    "band": "30-40%",
+    "n": 85,
+    "predicted": 0.3402,
+    "observed": 0.0235
+   },
+   {
+    "band": "40-50%",
+    "n": 60,
+    "predicted": 0.449,
+    "observed": 0.0833
+   },
+   {
+    "band": "50-60%",
+    "n": 39,
+    "predicted": 0.5428,
+    "observed": 0.1282
+   },
+   {
+    "band": "60-70%",
+    "n": 44,
+    "predicted": 0.6526,
+    "observed": 0.1364
+   },
+   {
+    "band": "70-80%",
+    "n": 51,
+    "predicted": 0.754,
+    "observed": 0.4314
+   },
+   {
+    "band": "80-90%",
+    "n": 52,
+    "predicted": 0.8596,
+    "observed": 0.6154
+   },
+   {
+    "band": "90-100%",
+    "n": 464,
+    "predicted": 0.9681,
+    "observed": 0.8556
+   }
+  ],
+  "ece": 0.0369,
+  "note": "Scores rank well but are not probabilities (class weighting inflates them). Use the risk tier, or calibrate per bank before quoting a score as a probability."
+ },
+ "drift": {
+  "Bank-A": {
+   "score_psi": 0.0008,
+   "network_vs_bank_psi": 0.0002,
+   "features": {
+    "bidir_ratio": 0.0012,
+    "n_cp": 0.0012,
+    "reg_cp_rare": 0.0009
+   },
+   "status": "stable"
+  },
+  "Bank-B": {
+   "score_psi": 0.0016,
+   "network_vs_bank_psi": 0.0006,
+   "features": {
+    "bidir_ratio": 0.0014,
+    "n_cp": 0.0015,
+    "reg_cp_rare": 0.0011
+   },
+   "status": "stable"
+  },
+  "Bank-C": {
+   "score_psi": 0.0025,
+   "network_vs_bank_psi": 0.0004,
+   "features": {
+    "bidir_ratio": 0.0026,
+    "n_cp": 0.0025,
+    "reg_cp_rare": 0.0036
+   },
+   "status": "stable"
+  }
+ },
+ "releases": {
+  "rule": "release only if no bank's validation AUC-PR drops > 0.01 below its best released version",
+  "versions": [
+   {
+    "round": 25,
+    "val": {
+     "Bank-A": 0.8175,
+     "Bank-B": 0.7992,
+     "Bank-C": 0.7283
+    },
+    "decision": "release",
+    "regressions": {}
+   },
+   {
+    "round": 50,
+    "val": {
+     "Bank-A": 0.8106,
+     "Bank-B": 0.8184,
+     "Bank-C": 0.7362
+    },
+    "decision": "release",
+    "regressions": {}
+   },
+   {
+    "round": 75,
+    "val": {
+     "Bank-A": 0.8089,
+     "Bank-B": 0.8116,
+     "Bank-C": 0.7555
+    },
+    "decision": "release",
+    "regressions": {}
+   },
+   {
+    "round": 100,
+    "val": {
+     "Bank-A": 0.8129,
+     "Bank-B": 0.8187,
+     "Bank-C": 0.7616
+    },
+    "decision": "release",
+    "regressions": {}
+   },
+   {
+    "round": 125,
+    "val": {
+     "Bank-A": 0.8143,
+     "Bank-B": 0.8131,
+     "Bank-C": 0.7447
+    },
+    "decision": "hold (keep round 100)",
+    "regressions": {
+     "Bank-C": 0.0168
+    }
+   },
+   {
+    "round": 150,
+    "val": {
+     "Bank-A": 0.8166,
+     "Bank-B": 0.8121,
+     "Bank-C": 0.7342
+    },
+    "decision": "hold (keep round 100)",
+    "regressions": {
+     "Bank-C": 0.0273
+    }
+   },
+   {
+    "round": 175,
+    "val": {
+     "Bank-A": 0.8154,
+     "Bank-B": 0.8172,
+     "Bank-C": 0.7457
+    },
+    "decision": "hold (keep round 100)",
+    "regressions": {
+     "Bank-C": 0.0159
+    }
+   },
+   {
+    "round": 200,
+    "val": {
+     "Bank-A": 0.8198,
+     "Bank-B": 0.8156,
+     "Bank-C": 0.7434
+    },
+    "decision": "hold (keep round 100)",
+    "regressions": {
+     "Bank-C": 0.0182
+    }
+   },
+   {
+    "round": 225,
+    "val": {
+     "Bank-A": 0.8361,
+     "Bank-B": 0.8184,
+     "Bank-C": 0.738
+    },
+    "decision": "hold (keep round 100)",
+    "regressions": {
+     "Bank-C": 0.0236
+    }
+   },
+   {
+    "round": 250,
+    "val": {
+     "Bank-A": 0.8343,
+     "Bank-B": 0.8139,
+     "Bank-C": 0.7354
+    },
+    "decision": "hold (keep round 100)",
+    "regressions": {
+     "Bank-C": 0.0261
+    }
+   }
+  ],
+  "live_round": 100,
+  "test_check": {
+   "100": {
+    "overall": 0.7696,
+    "Bank-A": 0.7235,
+    "Bank-B": 0.7828,
+    "Bank-C": 0.8046
+   },
+   "250": {
+    "overall": 0.7691,
+    "Bank-A": 0.7157,
+    "Bank-B": 0.801,
+    "Bank-C": 0.7943
+   }
+  }
+ }
+}

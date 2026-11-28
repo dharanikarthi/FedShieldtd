@@ -1,0 +1,132 @@
+{
+ "contract": "FedShield NFPC feature contract",
+ "version": "1.0",
+ "n_features": 174,
+ "reports": [
+  {
+   "bank": "Bank-A",
+   "contract_version": "1.0",
+   "rows_checked": 38205,
+   "pass": 174,
+   "fail": 0,
+   "missing": 0,
+   "unknown_columns": 0,
+   "ready_to_join": true,
+   "checks": []
+  },
+  {
+   "bank": "Bank-B",
+   "contract_version": "1.0",
+   "rows_checked": 33399,
+   "pass": 174,
+   "fail": 0,
+   "missing": 0,
+   "unknown_columns": 0,
+   "ready_to_join": true,
+   "checks": []
+  },
+  {
+   "bank": "Bank-C",
+   "contract_version": "1.0",
+   "rows_checked": 24487,
+   "pass": 174,
+   "fail": 0,
+   "missing": 0,
+   "unknown_columns": 0,
+   "ready_to_join": true,
+   "checks": []
+  },
+  {
+   "bank": "New co-op bank (balances in paise, no registry)",
+   "contract_version": "1.0",
+   "rows_checked": 24487,
+   "pass": 158,
+   "fail": 11,
+   "missing": 5,
+   "unknown_columns": 0,
+   "ready_to_join": false,
+   "checks": [
+    {
+     "feature": "avg_balance",
+     "status": "fail",
+     "detail": "16% outside valid range: check unit or definition"
+    },
+    {
+     "feature": "monthly_avg_balance",
+     "status": "fail",
+     "detail": "16% outside valid range: check unit or definition"
+    },
+    {
+     "feature": "quarterly_avg_balance",
+     "status": "fail",
+     "detail": "17% outside valid range: check unit or definition"
+    },
+    {
+     "feature": "daily_avg_balance",
+     "status": "fail",
+     "detail": "17% outside valid range: check unit or definition"
+    },
+    {
+     "feature": "balance_gap_daily_monthly",
+     "status": "fail",
+     "detail": "17% outside valid range: check unit or definition"
+    },
+    {
+     "feature": "bal_min",
+     "status": "fail",
+     "detail": "88% outside valid range: check unit or definition"
+    },
+    {
+     "feature": "bal_mean",
+     "status": "fail",
+     "detail": "84% outside valid range: check unit or definition"
+    },
+    {
+     "feature": "bal_max",
+     "status": "fail",
+     "detail": "70% outside valid range: check unit or definition"
+    },
+    {
+     "feature": "bal_std",
+     "status": "fail",
+     "detail": "98% outside valid range: check unit or definition"
+    },
+    {
+     "feature": "volume_to_balance",
+     "status": "fail",
+     "detail": "17% outside valid range: check unit or definition"
+    },
+    {
+     "feature": "balance_drain",
+     "status": "fail",
+     "detail": "100% outside valid range: check unit or definition"
+    },
+    {
+     "feature": "reg_cp_flagged",
+     "status": "missing",
+     "detail": "column absent (allowed; treated as NaN)"
+    },
+    {
+     "feature": "reg_cp_rare",
+     "status": "missing",
+     "detail": "column absent (allowed; treated as NaN)"
+    },
+    {
+     "feature": "reg_cp_links",
+     "status": "missing",
+     "detail": "column absent (allowed; treated as NaN)"
+    },
+    {
+     "feature": "reg_cp_share",
+     "status": "missing",
+     "detail": "column absent (allowed; treated as NaN)"
+    },
+    {
+     "feature": "reg_ip_shared_mule",
+     "status": "missing",
+     "detail": "column absent (allowed; treated as NaN)"
+    }
+   ]
+  }
+ ]
+}

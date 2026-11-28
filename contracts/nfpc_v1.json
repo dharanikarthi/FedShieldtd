@@ -1,0 +1,2096 @@
+{
+ "name": "FedShield NFPC feature contract",
+ "version": "1.0",
+ "entity": "account",
+ "missing_value": "NaN (goes to a dedicated bin; a bank may omit a feature it cannot compute)",
+ "features": [
+  {
+   "name": "product_code",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Product code",
+   "valid_range": [
+    100.0,
+    1313.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "avg_balance",
+   "group": "balances",
+   "unit": "INR / share",
+   "definition": "Avg balance",
+   "valid_range": [
+    -4342410.42428,
+    7320408.93564
+   ],
+   "expected_missing": 0.0595,
+   "binary": false
+  },
+  {
+   "name": "nomination_flag",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Nomination flag",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "cheque_allowed",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Cheque allowed",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "cheque_availed",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Cheque availed",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "num_chequebooks",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Num chequebooks",
+   "valid_range": [
+    0.0,
+    3.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "kyc_compliant",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "KYC compliant",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "rural_branch",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Rural branch",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "monthly_avg_balance",
+   "group": "balances",
+   "unit": "INR / share",
+   "definition": "Monthly avg balance",
+   "valid_range": [
+    -4333995.39104,
+    7485446.86212
+   ],
+   "expected_missing": 0.0595,
+   "binary": false
+  },
+  {
+   "name": "quarterly_avg_balance",
+   "group": "balances",
+   "unit": "INR / share",
+   "definition": "Quarterly avg balance",
+   "valid_range": [
+    -4486267.9532,
+    7774360.0632
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "daily_avg_balance",
+   "group": "balances",
+   "unit": "INR / share",
+   "definition": "Daily avg balance",
+   "valid_range": [
+    -4445389.4825,
+    7369883.4046
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "pan_available",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Pan available",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "aadhaar_available",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Aadhaar available",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "passport_available",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Passport available",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "mobile_banking_flag",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Mobile banking flag",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "internet_banking_flag",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Internet banking flag",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "atm_card_flag",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "ATM card flag",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "demat_flag",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Demat flag",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "credit_card_flag",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Credit card flag",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "fastag_flag",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Fastag flag",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "joint_account_flag",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Joint account flag",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "nri_flag",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Nri flag",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "loan_sum",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Loan sum",
+   "valid_range": [
+    -10255356.38224,
+    -19293.21664
+   ],
+   "expected_missing": 0.791,
+   "binary": false
+  },
+  {
+   "name": "loan_count",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Loan count",
+   "valid_range": [
+    0.0,
+    3.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "cc_sum",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Cc sum",
+   "valid_range": [
+    -1089625.6923,
+    505220.476
+   ],
+   "expected_missing": 0.839,
+   "binary": false
+  },
+  {
+   "name": "cc_count",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Cc count",
+   "valid_range": [
+    0.0,
+    2.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "od_sum",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Od sum",
+   "valid_range": [
+    -608387.3376,
+    260902.8568
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "od_count",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Od count",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "ka_sum",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Ka sum",
+   "valid_range": [
+    -860766.2993,
+    2702773.9533
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "ka_count",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Ka count",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "sa_sum",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Sa sum",
+   "valid_range": [
+    -1326621.2092,
+    2214378.802
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "sa_count",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Sa count",
+   "valid_range": [
+    0.0,
+    2.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "branch_employee_count",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Branch size",
+   "valid_range": [
+    1.0,
+    49.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "branch_turnover",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Branch turnover",
+   "valid_range": [
+    5.01,
+    225.88
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "branch_asset_size",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Branch asset size",
+   "valid_range": [
+    24.45,
+    499.05
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "account_age_days",
+   "group": "account lifecycle",
+   "unit": "days",
+   "definition": "Account age",
+   "valid_range": [
+    23.0,
+    3642.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "customer_age_years",
+   "group": "account lifecycle",
+   "unit": "days",
+   "definition": "Customer age years",
+   "valid_range": [
+    18.568104,
+    80.421384
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "relationship_days",
+   "group": "account lifecycle",
+   "unit": "days",
+   "definition": "Relationship days",
+   "valid_range": [
+    42.0,
+    11127.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "days_since_mobile_update",
+   "group": "account lifecycle",
+   "unit": "days",
+   "definition": "Mobile number changed",
+   "valid_range": [
+    1.0,
+    179.0
+   ],
+   "expected_missing": 0.8477,
+   "binary": false
+  },
+  {
+   "name": "mobile_changed_after_open",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Mobile changed after open",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "gender_f",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Gender f",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "pin_mismatch_perm",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Pin mismatch perm",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "pin_mismatch_branch",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Pin mismatch branch",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "pin_region_mismatch",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Pin region mismatch",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "n_accounts_customer",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Number of accounts customer",
+   "valid_range": [
+    1.0,
+    2.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "product_family_code",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Product family code",
+   "valid_range": [
+    0.0,
+    2.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "scheme_pmjdy",
+   "group": "government schemes",
+   "unit": "flag",
+   "definition": "Scheme pmjdy",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "scheme_pmsby",
+   "group": "government schemes",
+   "unit": "flag",
+   "definition": "Scheme pmsby",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "scheme_pmjjby",
+   "group": "government schemes",
+   "unit": "flag",
+   "definition": "Scheme pmjjby",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "scheme_apy",
+   "group": "government schemes",
+   "unit": "flag",
+   "definition": "Scheme apy",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "scheme_scss",
+   "group": "government schemes",
+   "unit": "flag",
+   "definition": "Scheme scss",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "scheme_ssa",
+   "group": "government schemes",
+   "unit": "flag",
+   "definition": "Scheme ssa",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": true
+  },
+  {
+   "name": "branch_type_code",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Branch type code",
+   "valid_range": [
+    0.0,
+    2.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "balance_gap_daily_monthly",
+   "group": "balances",
+   "unit": "INR / share",
+   "definition": "Balance gap daily monthly",
+   "valid_range": [
+    -1567597.432,
+    1483743.3055
+   ],
+   "expected_missing": 0.0595,
+   "binary": false
+  },
+  {
+   "name": "n_txn",
+   "group": "timing and velocity",
+   "unit": "count / rate",
+   "definition": "Transactions",
+   "valid_range": [
+    5.0,
+    15026.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "n_credit",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Number of credit",
+   "valid_range": [
+    2.0,
+    6968.73
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "n_debit",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Number of debit",
+   "valid_range": [
+    2.0,
+    8064.91
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "sum_credit",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Total credits",
+   "valid_range": [
+    1011.530606,
+    381509252.626848
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "sum_debit",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Sum debit",
+   "valid_range": [
+    1372.207508,
+    467894992.541798
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mean_amt",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Mean amount",
+   "valid_range": [
+    884.275919,
+    227537.43671
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "median_amt",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Median amount",
+   "valid_range": [
+    221.53915,
+    15327.015137
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "std_amt",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Std amount",
+   "valid_range": [
+    1021.213464,
+    8065679.518629
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "max_amt",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Peak amount",
+   "valid_range": [
+    2817.397588,
+    500000000.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "n_reversal",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Number of reversal",
+   "valid_range": [
+    0.0,
+    77.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "n_cp",
+   "group": "money flow",
+   "unit": "ratio / count",
+   "definition": "Distinct counterparties",
+   "valid_range": [
+    4.0,
+    130.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "n_cp_in",
+   "group": "money flow",
+   "unit": "ratio / count",
+   "definition": "Distinct senders",
+   "valid_range": [
+    2.0,
+    76.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "n_cp_out",
+   "group": "money flow",
+   "unit": "ratio / count",
+   "definition": "Distinct beneficiaries",
+   "valid_range": [
+    2.0,
+    86.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "active_days",
+   "group": "account lifecycle",
+   "unit": "days",
+   "definition": "Active days",
+   "valid_range": [
+    5.0,
+    1799.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "active_months",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Active months",
+   "valid_range": [
+    1.0,
+    60.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "round_1k_share",
+   "group": "amount patterns",
+   "unit": "share / count",
+   "definition": "Round amounts",
+   "valid_range": [
+    0.0,
+    0.840147
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "round_5k_share",
+   "group": "amount patterns",
+   "unit": "share / count",
+   "definition": "Round \u20b95,000 amounts",
+   "valid_range": [
+    0.0,
+    0.60872
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "n_struct_50k",
+   "group": "amount patterns",
+   "unit": "share / count",
+   "definition": "Just-below-\u20b950k count",
+   "valid_range": [
+    0.0,
+    89.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "n_struct_10k",
+   "group": "amount patterns",
+   "unit": "share / count",
+   "definition": "Number of struct 10k",
+   "valid_range": [
+    0.0,
+    162.91
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "struct_50k_share",
+   "group": "amount patterns",
+   "unit": "share / count",
+   "definition": "Just-below-\u20b950k amounts",
+   "valid_range": [
+    0.0,
+    0.083333
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "ch_upi_credit",
+   "group": "payment channels",
+   "unit": "share of transactions",
+   "definition": "UPI credits",
+   "valid_range": [
+    0.111111,
+    0.625
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "ch_upi_debit",
+   "group": "payment channels",
+   "unit": "share of transactions",
+   "definition": "UPI debit",
+   "valid_range": [
+    0.0,
+    0.6
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "ch_imps",
+   "group": "payment channels",
+   "unit": "share of transactions",
+   "definition": "IMPS share",
+   "valid_range": [
+    0.0,
+    0.2
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "ch_neft",
+   "group": "payment channels",
+   "unit": "share of transactions",
+   "definition": "NEFT share",
+   "valid_range": [
+    0.0,
+    0.181818
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "ch_atm_wd",
+   "group": "payment channels",
+   "unit": "share of transactions",
+   "definition": "ATM withdrawals",
+   "valid_range": [
+    0.0,
+    0.0625
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "ch_cash_dep",
+   "group": "payment channels",
+   "unit": "share of transactions",
+   "definition": "Cash dep",
+   "valid_range": [
+    0.0,
+    0.071429
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "ch_p2a",
+   "group": "payment channels",
+   "unit": "share of transactions",
+   "definition": "P2a",
+   "valid_range": [
+    0.0,
+    0.142857
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "ch_pos",
+   "group": "payment channels",
+   "unit": "share of transactions",
+   "definition": "Card (POS) spend",
+   "valid_range": [
+    0.0,
+    0.142857
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "ch_cheque",
+   "group": "payment channels",
+   "unit": "share of transactions",
+   "definition": "Cheque",
+   "valid_range": [
+    0.0,
+    0.071429
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "ch_fund_transfer",
+   "group": "payment channels",
+   "unit": "share of transactions",
+   "definition": "Fund-transfer share",
+   "valid_range": [
+    0.0,
+    0.249392
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "n_channels",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Channels used",
+   "valid_range": [
+    2.0,
+    35.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "n_mcc",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Number of MCC",
+   "valid_range": [
+    4.0,
+    58.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "night_share",
+   "group": "timing and velocity",
+   "unit": "count / rate",
+   "definition": "Night activity",
+   "valid_range": [
+    0.0,
+    0.5
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "weekend_share",
+   "group": "timing and velocity",
+   "unit": "count / rate",
+   "definition": "Weekend share",
+   "valid_range": [
+    0.058824,
+    0.6
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "month_edge_share",
+   "group": "timing and velocity",
+   "unit": "count / rate",
+   "definition": "Month edge share",
+   "valid_range": [
+    0.117236,
+    0.706373
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "bal_min",
+   "group": "balances",
+   "unit": "INR / share",
+   "definition": "Balance min",
+   "valid_range": [
+    -100000000.0,
+    2645717.6875
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "bal_mean",
+   "group": "balances",
+   "unit": "INR / share",
+   "definition": "Balance mean",
+   "valid_range": [
+    -87453258.85594,
+    83556012.595751
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "bal_max",
+   "group": "balances",
+   "unit": "INR / share",
+   "definition": "Balance peak",
+   "valid_range": [
+    -2821341.875,
+    100000000.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "bal_std",
+   "group": "balances",
+   "unit": "INR / share",
+   "definition": "Balance std",
+   "valid_range": [
+    0.0,
+    50952041.260297
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "near_zero_bal_share",
+   "group": "balances",
+   "unit": "INR / share",
+   "definition": "Near-zero balance",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "n_ip",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Distinct IPs/devices",
+   "valid_range": [
+    0.0,
+    5212.91
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "ip_share",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Ip share",
+   "valid_range": [
+    0.0,
+    0.598941
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "n_locations",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Distinct locations",
+   "valid_range": [
+    1.0,
+    9.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "lat_std",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Lat std",
+   "valid_range": [
+    0.026095,
+    3.571642
+   ],
+   "expected_missing": 0.0218,
+   "binary": false
+  },
+  {
+   "name": "lon_std",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Lon std",
+   "valid_range": [
+    0.026064,
+    2.983456
+   ],
+   "expected_missing": 0.0218,
+   "binary": false
+  },
+  {
+   "name": "bank_induced_share",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Bank induced share",
+   "valid_range": [
+    0.0,
+    0.157895
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "cash_sub_share",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Cash sub share",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0163,
+   "binary": false
+  },
+  {
+   "name": "loan_sub_share",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Loan sub share",
+   "valid_range": [
+    0.0,
+    0.11402
+   ],
+   "expected_missing": 0.0163,
+   "binary": false
+  },
+  {
+   "name": "atm_deposit_share",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "ATM deposit share",
+   "valid_range": [
+    0.0,
+    0.014482
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "n_bidir",
+   "group": "money flow",
+   "unit": "ratio / count",
+   "definition": "Two-way counterparties (count)",
+   "valid_range": [
+    0.0,
+    36.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "bidir_ratio",
+   "group": "money flow",
+   "unit": "ratio / count",
+   "definition": "Two-way counterparties",
+   "valid_range": [
+    0.0,
+    0.973684
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "top_beneficiary_share",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Top-beneficiary concentration",
+   "valid_range": [
+    0.069668,
+    0.980334
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "max_txn_day",
+   "group": "timing and velocity",
+   "unit": "count / rate",
+   "definition": "Peak transactions day",
+   "valid_range": [
+    1.0,
+    175.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "passthrough_sameday",
+   "group": "money flow",
+   "unit": "ratio / count",
+   "definition": "Same-day pass-through",
+   "valid_range": [
+    0.0,
+    0.684712
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "max_gap_days",
+   "group": "account lifecycle",
+   "unit": "days",
+   "definition": "Longest dormancy",
+   "valid_range": [
+    1.0,
+    1020.37
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "median_txn_active_day",
+   "group": "timing and velocity",
+   "unit": "count / rate",
+   "definition": "Median transactions active day",
+   "valid_range": [
+    1.0,
+    124.91
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "passthrough_48h",
+   "group": "money flow",
+   "unit": "ratio / count",
+   "definition": "Funds drained within 48h",
+   "valid_range": [
+    0.0,
+    0.888044
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "txn_after_dormancy",
+   "group": "account lifecycle",
+   "unit": "days",
+   "definition": "Activity after dormancy",
+   "valid_range": [
+    0.0,
+    404.82
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "n_post_mobile_60d",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Number of post mobile 60d",
+   "valid_range": [
+    0.0,
+    1421.91
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "n_pre_mobile_60d",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Number of pre mobile 60d",
+   "valid_range": [
+    0.0,
+    1439.64
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_txn_1h",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak transactions in an hour",
+   "valid_range": [
+    1.0,
+    23.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_txn_12h",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak transactions per 12h",
+   "valid_range": [
+    1.0,
+    143.91
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_txn_1d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak transactions in a day",
+   "valid_range": [
+    1.0,
+    184.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_txn_7d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak transactions in a week",
+   "valid_range": [
+    1.0,
+    928.55
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_credit_amt_1h",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak credit amount per hour",
+   "valid_range": [
+    634.95459,
+    298582189.44
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_credit_amt_1d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak credits in a day",
+   "valid_range": [
+    643.3825,
+    298590153.996677
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_credit_amt_7d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak credits in a week",
+   "valid_range": [
+    686.742108,
+    300196586.517469
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_debit_amt_1d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak debits in a day",
+   "valid_range": [
+    895.240591,
+    340694738.049334
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_debit_amt_7d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak debit amount per week",
+   "valid_range": [
+    900.893815,
+    340807645.864898
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_credit_avg_ratio_7d_vs_90d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak credit avg ratio per week vs 90d",
+   "valid_range": [
+    95.195996,
+    4670619.565496
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_credit_vol_burst_7d_vs_90d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak credit vol burst per week vs 90d",
+   "valid_range": [
+    217.486901,
+    21087449.596004
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_debit_vol_burst_7d_vs_90d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak debit vol burst per week vs 90d",
+   "valid_range": [
+    254.905878,
+    24713131.654494
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_passthrough_1d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak passthrough per day",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_upi_1d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak UPI in a day",
+   "valid_range": [
+    1.0,
+    140.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_upi_7d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak UPI per week",
+   "valid_range": [
+    1.0,
+    694.91
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_imps_1d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak IMPS per day",
+   "valid_range": [
+    0.0,
+    13.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_imps_7d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak IMPS per week",
+   "valid_range": [
+    0.0,
+    45.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_neft_1d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak NEFT per day",
+   "valid_range": [
+    0.0,
+    7.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_neft_7d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak NEFT per week",
+   "valid_range": [
+    0.0,
+    22.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_atm_1d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak ATM per day",
+   "valid_range": [
+    0.0,
+    5.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_atm_7d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak ATM per week",
+   "valid_range": [
+    0.0,
+    10.91
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_upi_amt_7d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak UPI amount per week",
+   "valid_range": [
+    1630.238049,
+    425102512.827874
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_atm_amt_7d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak ATM amount per week",
+   "valid_range": [
+    0.0,
+    18034256.672497
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_night_1d",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak night transactions",
+   "valid_range": [
+    0.0,
+    20.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_night_share_23_07",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Night activity",
+   "valid_range": [
+    0.0,
+    0.582939
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_num_digit_mean",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Num digit mean",
+   "valid_range": [
+    2.912206,
+    4.564748
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_num_digit_std",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Num digit std",
+   "valid_range": [
+    0.467908,
+    1.401328
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_sum_digit_mean",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Amount digit pattern",
+   "valid_range": [
+    4.862573,
+    18.679012
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_sum_digit_std",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Amount digit spread",
+   "valid_range": [
+    3.565086,
+    8.975179
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_high_digitsum_5digit_share",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "High digitsum 5digit share",
+   "valid_range": [
+    0.0,
+    0.074074
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_conc_credit_3m_max",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Credits within 3 minutes",
+   "valid_range": [
+    0.0,
+    3.0
+   ],
+   "expected_missing": 0.0001,
+   "binary": false
+  },
+  {
+   "name": "mh_conc_credit_15m_max",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Credits within 15 minutes",
+   "valid_range": [
+    0.0,
+    6.0
+   ],
+   "expected_missing": 0.0001,
+   "binary": false
+  },
+  {
+   "name": "mh_conc_credit_15m_mean",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Concurrent credit 15m mean",
+   "valid_range": [
+    0.0,
+    0.919215
+   ],
+   "expected_missing": 0.0001,
+   "binary": false
+  },
+  {
+   "name": "mh_conc_debit_3m_max",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Debits within 3 minutes",
+   "valid_range": [
+    0.0,
+    3.0
+   ],
+   "expected_missing": 0.0002,
+   "binary": false
+  },
+  {
+   "name": "mh_conc_debit_15m_max",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Concurrent debit 15m peak",
+   "valid_range": [
+    0.0,
+    6.0
+   ],
+   "expected_missing": 0.0002,
+   "binary": false
+  },
+  {
+   "name": "mh_conc_debit_15m_mean",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Concurrent debit 15m mean",
+   "valid_range": [
+    0.0,
+    1.055607
+   ],
+   "expected_missing": 0.0002,
+   "binary": false
+  },
+  {
+   "name": "mh_mcc_amount_outlier_share",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "MCC amount outlier share",
+   "valid_range": [
+    0.0,
+    0.142857
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_mcc_amount_max_z",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "MCC amount peak z",
+   "valid_range": [
+    0.718192,
+    12.271624
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_unique_party_week",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak new parties in a week",
+   "valid_range": [
+    1.0,
+    40.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_max_unique_party_month",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "Peak unique party month",
+   "valid_range": [
+    1.0,
+    74.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mh_mean_unique_party_month",
+   "group": "MuleHunter-style windows",
+   "unit": "per window",
+   "definition": "New parties per month",
+   "valid_range": [
+    1.0,
+    33.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "passthrough_ratio",
+   "group": "money flow",
+   "unit": "ratio / count",
+   "definition": "Debit/credit balance",
+   "valid_range": [
+    0.013568,
+    0.999526
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "credit_debit_ratio",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Credit/debit ratio",
+   "valid_range": [
+    0.032418,
+    38.95654
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "fan_in_out_ratio",
+   "group": "money flow",
+   "unit": "ratio / count",
+   "definition": "Fan-in / fan-out",
+   "valid_range": [
+    0.120501,
+    3.660667
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "txn_per_cp",
+   "group": "money flow",
+   "unit": "ratio / count",
+   "definition": "Transactions per counterparty",
+   "valid_range": [
+    1.0,
+    2109.96792
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "span_days",
+   "group": "account lifecycle",
+   "unit": "days",
+   "definition": "Active lifetime",
+   "valid_range": [
+    16.0,
+    1823.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "txn_velocity",
+   "group": "timing and velocity",
+   "unit": "count / rate",
+   "definition": "Transaction velocity",
+   "valid_range": [
+    0.003916,
+    115.210572
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "active_day_density",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Active-day density",
+   "valid_range": [
+    0.003906,
+    1.029412
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "burst_ratio",
+   "group": "timing and velocity",
+   "unit": "count / rate",
+   "definition": "Burst intensity",
+   "valid_range": [
+    1.0,
+    11.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "dormancy_wake_intensity",
+   "group": "account lifecycle",
+   "unit": "days",
+   "definition": "Wake-up intensity",
+   "valid_range": [
+    0.0,
+    2.24455
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "mobile_spike_ratio",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Post-mobile-change spike",
+   "valid_range": [
+    0.008336,
+    70.119998
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "volume_to_balance",
+   "group": "balances",
+   "unit": "INR / share",
+   "definition": "Volume vs balance",
+   "valid_range": [
+    0.002006,
+    114445.88632
+   ],
+   "expected_missing": 0.0595,
+   "binary": false
+  },
+  {
+   "name": "balance_drain",
+   "group": "money flow",
+   "unit": "ratio / count",
+   "definition": "Balance drain",
+   "valid_range": [
+    0.471417,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "geo_spread",
+   "group": "account and KYC",
+   "unit": "value / flag",
+   "definition": "Geographic spread",
+   "valid_range": [
+    0.0,
+    4.696164
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "ip_per_txn",
+   "group": "timing and velocity",
+   "unit": "count / rate",
+   "definition": "Ip per transactions",
+   "valid_range": [
+    0.0,
+    0.598941
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "reg_cp_flagged",
+   "group": "consortium registry",
+   "unit": "count / score",
+   "definition": "Counterparties linked to confirmed mules",
+   "valid_range": [
+    0.0,
+    74.91
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "reg_cp_rare",
+   "group": "consortium registry",
+   "unit": "count / score",
+   "definition": "Shared rare counterparties",
+   "valid_range": [
+    0.0,
+    3.433362
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "reg_cp_links",
+   "group": "consortium registry",
+   "unit": "count / score",
+   "definition": "Links to registry accounts",
+   "valid_range": [
+    0.0,
+    1839.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "reg_cp_share",
+   "group": "consortium registry",
+   "unit": "count / score",
+   "definition": "Share of flagged counterparties",
+   "valid_range": [
+    0.0,
+    1.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  },
+  {
+   "name": "reg_ip_shared_mule",
+   "group": "consortium registry",
+   "unit": "count / score",
+   "definition": "Device shared with a confirmed mule",
+   "valid_range": [
+    0.0,
+    80.0
+   ],
+   "expected_missing": 0.0,
+   "binary": false
+  }
+ ]
+}

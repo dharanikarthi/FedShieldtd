@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { BANK_COLOR, get, pct } from "../api";
 import { Icon } from "../components/icons";
 import { Section } from "../components/ui";
@@ -31,7 +31,8 @@ function Delta({ a, b }: { a?: number; b?: number }) {
 
 export default function Trust() {
   const [g, setG] = useState<any>();
-  useEffect(() => { get("/gaps").then(setG).catch(() => setG(null)); }, []);
+  const [ops, setOps] = useState<any>();
+  useEffect(() => { get("/gaps").then(setG).catch(() => setG(null)); get("/ops").then(setOps).catch(() => setOps(null)); }, []);
   const banks = g ? Object.keys(g.baseline) : [];
 
   return (
@@ -55,6 +56,9 @@ export default function Trust() {
           ))}
         </ol>
       </Section>
+
+      {ops?.contract && <ContractPanel c={ops.contract} />}
+      {ops?.monitor && <MonitorPanel m={ops.monitor} />}
 
       {g === null && <div className="card p-4 text-sm text-ink-2">Stress-test results not generated yet: run <code>python -m fedshield.experiments.gaps</code>.</div>}
       {g && (
@@ -164,6 +168,90 @@ export default function Trust() {
           </ul>
         </Section>
       </div>
+    </div>
+  );
+}
+
+function ContractPanel({ c }: { c: any }) {
+  const [open, setOpen] = useState<string | null>(null);
+  return (
+    <Section title={`Joining the network: feature contract v${c.version}`}
+      sub={`${c.n_features} features, each with a definition, unit, valid range and expected missing rate. A bank validates its own data locally; only the pass/fail report leaves the bank.`}>
+      <table className="data w-full">
+        <thead><tr><th>Bank</th><th>Pass</th><th>Fail</th><th>Not computed</th><th>Ready to join</th><th></th></tr></thead>
+        <tbody>
+          {c.reports.map((r: any) => (
+            <Fragment key={r.bank}>
+              <tr>
+                <td>{r.bank}</td><td>{r.pass}</td><td className={r.fail ? "text-critical font-medium" : ""}>{r.fail}</td><td>{r.missing}</td>
+                <td>{r.ready_to_join ? <span className="text-good font-medium">Yes</span> : <span className="text-critical font-medium">Fix first</span>}</td>
+                <td>{r.checks.length > 0 && <button className="btn text-xs" onClick={() => setOpen(open === r.bank ? null : r.bank)}>{open === r.bank ? "Hide" : "Show issues"}</button>}</td>
+              </tr>
+              {open === r.bank && (
+                <tr><td colSpan={6}>
+                  <ul className="text-xs space-y-0.5">
+                    {r.checks.slice(0, 16).map((k: any) => <li key={k.feature}><code>{k.feature}</code>: <span className={k.status === "fail" ? "text-critical" : "text-ink-muted"}>{k.detail}</span></li>)}
+                  </ul>
+                </td></tr>
+              )}
+            </Fragment>
+          ))}
+        </tbody>
+      </table>
+      <p className="text-xs text-ink-muted mt-2">The last row is a deliberately broken bank: balances in paise instead of rupees and no registry features. The validator catches the unit error before it can corrupt the shared model; missing features are allowed. Run: <code>python -m fedshield.contract validate your_features.parquet</code></p>
+    </Section>
+  );
+}
+
+function MonitorPanel({ m }: { m: any }) {
+  const banks = Object.keys(m.drift);
+  const tc = m.releases.test_check ?? {};
+  const keys = Object.keys(tc);
+  return (
+    <div className="grid lg:grid-cols-2 gap-5">
+      <Section title="Can a bank rely on it? Release rule with rollback" sub={m.releases.rule}>
+        <div className="flex flex-wrap gap-1.5">
+          {m.releases.versions.map((v: any) => (
+            <span key={v.round} title={Object.entries(v.val).map(([b, x]: any) => `${b} ${x}`).join(" · ")}
+              className={`text-xs px-2 py-1 rounded border ${v.decision === "release" ? (v.round === m.releases.live_round ? "border-good bg-good/10 text-good font-medium" : "border-line") : "border-warn/50 text-warn"}`}>
+              round {v.round}: {v.decision === "release" ? (v.round === m.releases.live_round ? "LIVE" : "released") : `held${Object.keys(v.regressions).length ? ` (${Object.keys(v.regressions).join(", ")} dropped)` : ""}`}
+            </span>
+          ))}
+        </div>
+        {keys.length === 2 && (
+          <table className="data w-full mt-3">
+            <thead><tr><th>Held-out test</th><th>Overall</th>{banks.map((b) => <th key={b} style={{ color: BANK_COLOR[b] }}>{b}</th>)}</tr></thead>
+            <tbody>{keys.map((k) => (
+              <tr key={k}><td>Round {k}{+k === m.releases.live_round ? " (released)" : " (latest)"}</td><td>{tc[k].overall.toFixed(3)}</td>
+                {banks.map((b) => <td key={b}>{tc[k][b].toFixed(3)}</td>)}</tr>
+            ))}</tbody>
+          </table>
+        )}
+        <p className="text-xs text-ink-muted mt-2">Bank C's own validation fell after round 100, so the network keeps round 100. On held-out accounts that version is equal overall and better for Banks A and C; Bank B gives up a little. Every bank can veto a regression on its own data.</p>
+      </Section>
+      <Section title="Drift and calibration" sub="PSI: under 0.1 stable · 0.1–0.25 watch · over 0.25 act">
+        <table className="data w-full">
+          <thead><tr><th>Bank</th><th>Score PSI</th><th>Worst top-feature PSI</th><th>Status</th></tr></thead>
+          <tbody>{banks.map((b) => {
+            const fv = Object.values(m.drift[b].features).filter((x) => x != null) as number[];
+            return <tr key={b}><td style={{ color: BANK_COLOR[b] }}>{b}</td><td>{m.drift[b].score_psi.toFixed(3)}</td><td>{Math.max(...fv).toFixed(3)}</td>
+              <td className={m.drift[b].status === "stable" ? "text-good" : "text-warn"}>{m.drift[b].status}</td></tr>;
+          })}</tbody>
+        </table>
+        <div className="mt-3 label">Calibration · observed mule rate by score band (ECE {m.calibration.ece})</div>
+        <div className="flex items-end gap-1 h-24 mt-1">
+          {m.calibration.bands.map((c: any) => (
+            <div key={c.band} className="flex-1 flex flex-col items-center justify-end h-full" title={`${c.band}: predicted ${(c.predicted * 100).toFixed(0)}%, observed ${(c.observed * 100).toFixed(1)}% (n=${c.n})`}>
+              <div className="w-full flex items-end gap-px h-full">
+                <div className="flex-1 bg-axis rounded-t" style={{ height: `${c.predicted * 100}%` }} />
+                <div className="flex-1 bg-brand rounded-t" style={{ height: `${c.observed * 100}%` }} />
+              </div>
+              <span className="text-[9px] text-ink-muted mt-0.5">{c.band.split("-")[0]}</span>
+            </div>
+          ))}
+        </div>
+        <p className="text-xs text-ink-muted mt-2">Grey = score, blue = observed rate. {m.calibration.note}</p>
+      </Section>
     </div>
   );
 }

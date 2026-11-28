@@ -451,6 +451,16 @@ def aml_chains():
     return json.loads(p.read_text())
 
 
+@app.get("/api/ops")
+def ops():
+    """Feature contract validation + model monitoring (contract.py, experiments/monitor.py)."""
+    out = {}
+    for k in ("contract", "monitor"):
+        p = RESULTS / f"{k}.json"
+        out[k] = json.loads(p.read_text()) if p.exists() else None
+    return out
+
+
 @app.get("/api/gaps")
 def gaps():
     """Stress tests and deployment numbers (experiments/gaps.py)."""
