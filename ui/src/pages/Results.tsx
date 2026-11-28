@@ -82,7 +82,7 @@ export default function Results() {
         <Comparison title="IBM AMLworld · 5 institutions" sub="HI-Small; 98% of laundering transactions cross banks" block={aml.experiments?.base} />
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <Comparison title="NFPC + consortium suspect registry" sub="Adds hashed links to mules confirmed at any consortium bank" block={nf.registry?.fed} />
+        <Comparison title="NFPC + consortium suspect registry (headline numbers)" sub="The canonical run quoted everywhere: adds hashed links to mules confirmed at any consortium bank" block={nf.registry?.fed} />
         <Comparison title="AMLworld + consortium suspect registry" sub="Counterparty and same-owner (KYC entity) links across banks" block={aml.experiments?.registry_fed} />
       </div>
 

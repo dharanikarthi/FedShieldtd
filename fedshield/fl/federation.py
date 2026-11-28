@@ -51,6 +51,7 @@ class FedConfig:
     gate1_tau: float = 0.0
     weighting: bool = True
     eval_every: int = 25
+    min_cell: int = 0              # k-anonymity on released histograms: cells with < k rows are merged
     verbose: bool = False
     on_event: object = None        # callable(dict): live pipeline telemetry for the UI
 
@@ -64,6 +65,26 @@ def _direction(hist_root):
     bc = bins - (H * bins).sum(1, keepdims=True) / m
     v = (G * bc).sum(1)
     return v / (np.linalg.norm(v) + 1e-12)
+
+
+def _merge_small_cells(hist, counts, k):
+    """Min-cell rule. Any (node, feature, bin) cell built from fewer than k accounts (summed over all
+    banks) is merged into its neighbouring bin before the aggregator uses it, so no released
+    statistic describes fewer than k accounts. Totals are preserved; only split resolution drops."""
+    h, c = hist.copy(), counts.copy()
+    nb = h.shape[2]
+    for b in range(nb - 1):                                  # sweep left to right, pushing mass up
+        small = (c[:, :, b] > 0) & (c[:, :, b] < k)
+        if small.any():
+            h[:, :, b + 1][small] += h[:, :, b][small]
+            c[:, :, b + 1][small] += c[:, :, b][small]
+            h[:, :, b][small] = 0
+            c[:, :, b][small] = 0
+    last = (c[:, :, -1] > 0) & (c[:, :, -1] < k)             # a small last bin folds back down
+    if last.any():
+        h[:, :, -2][last] += h[:, :, -1][last]
+        h[:, :, -1][last] = 0
+    return h
 
 
 def _probe_auprc(banks, seed):
@@ -193,9 +214,11 @@ def federate(banks, cfg: FedConfig, feature_names, X_eval=None, y_eval=None, edg
                            for hp, h in zip(_tp, out)},
                   "masked_preview": {hp.name: [int(x) % 100000 for x in _sa.mask(hp.name, h).ravel()[:6]]
                                      for hp, h in zip(_tp, out)} if _sa is not None else {}})
-            if _sa is not None:
-                return _sa.unmask_sum([_sa.mask(hp.name, h) for hp, h in zip(_tp, out)], shape)
-            return np.sum(out, axis=0)
+            total = (_sa.unmask_sum([_sa.mask(hp.name, h) for hp, h in zip(_tp, out)], shape)
+                     if _sa is not None else np.sum(out, axis=0))
+            if cfg.min_cell > 0:
+                total = _merge_small_cells(total, np.sum([hp.count_histograms() for hp in _tp], axis=0), cfg.min_cell)
+            return total
 
         tree = build_tree(tree_parties, aggregate, p, rng)
         for hp in parties.values():

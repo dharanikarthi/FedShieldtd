@@ -53,9 +53,24 @@ def _fetch_bundle():
     print("bundle ready", flush=True)
 
 
+_LOAD_LOCK = __import__("threading").Lock()
+
+
 def _load():
+    """Build the cache completely before publishing it: concurrent first requests must never
+    see a half-filled cache."""
     if S:
         return S
+    with _LOAD_LOCK:
+        if S:
+            return S
+        T = _build()
+        S.update(T)
+    return S
+
+
+def _build():
+    S = {}
     _fetch_bundle()
     mdir = WORK / "models"
     with open(mdir / f"nfpc_{MODE}.pkl", "rb") as fh:
@@ -66,6 +81,14 @@ def _load():
     S["feats"] = feats.set_index("acct")
     S["medians"] = feats[art["features"]].median(numeric_only=True).to_dict()
     S["monthly"] = pd.read_parquet(WORK / "nfpc" / f"monthly_{MODE}.parquet")
+    # ₹ at risk = credits in the account's last 3 active months (what a freeze could still protect)
+    mo = S["monthly"].sort_values("month").groupby("acct").tail(3)
+    S["at_risk"] = mo.groupby("acct")["credit"].sum().to_dict()
+    # condition 2 (cross-bank links): rare counterparties shared with confirmed mules, top 3% of
+    # TRAINING accounts. Broad link counts fire on ~98% of accounts (everyone shares merchants).
+    trn = S["scores"].loc[S["scores"]["split"] != "test", "acct"]
+    S["link_thr"] = float(feats.set_index("acct").loc[trn, "reg_cp_rare"].quantile(0.97))
+    S["links"] = dict(zip(feats["acct"].astype(int), feats["reg_cp_rare"].fillna(0).astype(float)))
     S["results"] = {p.stem: json.loads(p.read_text()) for p in RESULTS.glob("*.json")}
     lp, lm = mdir / f"nfpc_{MODE}_local.parquet", mdir / f"nfpc_{MODE}_local_models.pkl"
     if lp.exists():
@@ -201,11 +224,17 @@ def alerts(limit: int = 200, include_clear: bool = False, sess=Depends(session))
         score, thr, model = _view(r, s)
         if not include_clear and score < 0.5 * thr:
             continue
+        rare = s["links"].get(int(r["acct"]), 0.0)
+        cond = (["high_risk"] if score >= thr else []) + (["cross_bank"] if rare >= s["link_thr"] else [])
         rows.append({"account_id": r["account_id"], "score": score, "threshold": thr, "model": model,
+                     "conditions": cond, "at_risk": float(s["at_risk"].get(int(r["acct"]), 0.0)),
                      "tier": _tier(score, thr), "bank": sess["bank"], "state": r["branch_state"],
                      "window": [_iso(r.get("win_start")), _iso(r.get("win_end"))],
                      "status": acted.get(r["account_id"], {}).get("action"), "ground_truth": int(r["is_mule"])})
-    rows.sort(key=lambda x: -x["score"])
+    # Three-condition alert engine: (1) high model risk, (2) repeated cross-bank links in the hashed
+    # registry, (3) linked to an active I4C case (interface; no public feed). Work order: most
+    # conditions met first, then most money still at risk, then score.
+    rows.sort(key=lambda x: (-len(x["conditions"]), -x["at_risk"], -x["score"]))
     return rows[:limit]
 
 
@@ -253,6 +282,7 @@ def account(account_id: str, lang: str = "en", sess=Depends(session)):
     reasons, mitig = localise(reasons, mitig, lang)
     mon = s["monthly"][s["monthly"]["acct"] == acct].sort_values("month")
     reg = {f: vals[art["features"].index(f)] for f in art["features"] if f.startswith("reg_")}
+    reg["strong_link"] = bool(reg.get("reg_cp_rare", 0) >= s["link_thr"])
     return {
         "account_id": account_id, "score": score, "tier": _tier(score, thr), "threshold": thr, "model": which,
         "local_score": None if pd.isna(r.get("local_score", np.nan)) else float(r["local_score"]),
@@ -396,7 +426,8 @@ def simulator():
     p = WORK / "demo_cases.json"
     if not p.exists():
         raise HTTPException(404, "demo cases not built")
-    cases = json.loads(p.read_text())["cases"]
+    dc = json.loads(p.read_text())
+    cases = dc["cases"]
     pick = {}
     for c in cases:
         if c["bank"] not in pick and c["local_score"] < c["local_threshold"] and c["fed_score"] >= c["fed_threshold"]:
@@ -408,7 +439,16 @@ def simulator():
                      "local_score": round(c["local_score"], 3), "local_threshold": round(c["local_threshold"], 3),
                      "fed_score": round(c["fed_score"], 3), "fed_threshold": round(c["fed_threshold"], 3),
                      "typology": c.get("alert_reason")})
-    return {"hops": hops}
+    return {"hops": hops, "summary": dc.get("summary", {})}
+
+
+@app.get("/api/gaps")
+def gaps():
+    """Stress tests and deployment numbers (experiments/gaps.py)."""
+    p = RESULTS / "gaps.json"
+    if not p.exists():
+        raise HTTPException(404, "run: python -m fedshield.experiments.gaps")
+    return json.loads(p.read_text())
 
 
 @app.get("/api/theatre")

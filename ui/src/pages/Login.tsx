@@ -43,7 +43,7 @@ export default function Login({ theme, toggleTheme }: { theme: string; toggleThe
             {[
               ["0 customer records shared", "only masked model updates leave a bank"],
               ["99.6% of pooled accuracy", "without pooling any data"],
-              ["Small banks gain the most", "co-op bank: 0.53 → 0.77 AUC-PR on day one"],
+              ["Small banks gain the most", "co-op bank: 0.53 → 0.76 AUC-PR on day one"],
             ].map(([a, b]) => (
               <li key={a} className="flex gap-3"><span className="mt-0.5 w-5 h-5 rounded-full bg-white/10 grid place-items-center"><Icon name="check" size={12} /></span>
                 <span><span className="font-medium">{a}</span><span className="text-white/60"> — {b}</span></span></li>

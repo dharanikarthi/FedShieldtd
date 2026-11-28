@@ -97,6 +97,19 @@ def _fmt(fmt, v):
         return str(v)
 
 
+# features where a LOW value is the suspicious direction; for every other templated feature HIGH is
+LOW_IS_RISKY = {"bidir_ratio", "n_bidir", "txn_per_cp", "active_day_density", "ch_pos", "account_age_days",
+                "span_days", "active_days", "kyc_compliant", "near_zero_bal_share_inv"}
+
+
+def _contradicts(f, v, m):
+    """True when the sentence would read backwards for an officer (e.g. 'only 5 below-threshold
+    transactions (typical 11)' raising risk). Such drivers are model interactions, not usable reasons."""
+    if f not in TEMPLATES or v is None or m is None:
+        return False
+    return (v > m) if f in LOW_IS_RISKY else (v < m)
+
+
 def explain(features, values, contribs, medians, k=5):
     """Top-k risk-raising reasons, plus the strongest mitigating factor."""
     order = sorted(range(len(features)), key=lambda i: -contribs[i])
@@ -109,6 +122,8 @@ def explain(features, values, contribs, medians, k=5):
         if m is not None and values[i] is not None and abs(float(values[i]) - float(m)) <= 1e-9 * max(1.0, abs(float(m))):
             continue          # value is typical: the effect is an interaction, not a sentence an officer can use
         label, fmt, sent = TEMPLATES.get(f, (_humanize(f), lambda v: f"{v:,.3g}", "{label}: {v} (typical {m})."))
+        if _contradicts(f, values[i], m):
+            continue
         if m is not None and _fmt(fmt, values[i]) == _fmt(fmt, m):
             continue          # looks identical to "typical" once rounded: not a usable reason
         out.append({"feature": f, "label": label, "value": values[i], "typical": medians.get(f),

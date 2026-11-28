@@ -12,6 +12,7 @@ import Stream from "./pages/Stream";
 import Supervisor from "./pages/Supervisor";
 import Theatre from "./pages/Theatre";
 import Simulator from "./pages/Simulator";
+import Trust from "./pages/Trust";
 
 type Item = { to: string; label: string; icon: string; el: JSX.Element; hint: string };
 type Group = { title: string; items: Item[] };
@@ -22,6 +23,7 @@ const UNDERSTAND: Item[] = [
   { to: "/scam-simulator", label: "Scam simulator", icon: "spark", el: <Simulator />, hint: "Follow a real scam across three banks: alone vs FedShield" },
   { to: "/how-it-works", label: "How it works", icon: "play", el: <Theatre />, hint: "Animated federated training, replayed from real runs" },
   { to: "/evidence", label: "Evidence", icon: "chart", el: <Results />, hint: "Every experiment, metric and limitation" },
+  { to: "/trust", label: "Deployment & trust", icon: "lock", el: <Trust />, hint: "Architecture, stress tests, threat model, governance, cost" },
 ];
 const OPERATE: Record<Session["role"], Item[]> = {
   bank: [
@@ -43,7 +45,8 @@ const TOUR = [
   { to: "/", ms: 11000, cap: "The problem: mule money crosses banks, but each bank only sees its own accounts." },
   { to: "/scam-simulator?autoplay", ms: 11000, cap: "A real scam, two outcomes: each bank alone vs the same banks with FedShield." },
   { to: "/how-it-works?autoplay", ms: 34000, cap: "How it works: banks train together and only masked summaries move. A small bank gets the network's model on day one." },
-  { to: "/evidence", ms: 10000, cap: "Every number is reproducible, and the limitations are reported too." },
+  { to: "/evidence", ms: 9000, cap: "Every number is reproducible, and the limitations are reported too." },
+  { to: "/trust", ms: 10000, cap: "Deployment: who runs it, what it survives, what it does not protect, and what it costs." },
 ];
 
 function useTheme() {

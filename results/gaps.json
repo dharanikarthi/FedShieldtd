@@ -1,0 +1,141 @@
+{
+ "params": {
+  "n_trees": 60,
+  "max_depth": 5,
+  "learning_rate": 0.1,
+  "colsample": 0.7,
+  "subsample": 0.8,
+  "n_bins": 64
+ },
+ "baseline": {
+  "Bank-A": {
+   "federated": 0.7263,
+   "local": 0.7017
+  },
+  "Bank-B": {
+   "federated": 0.7832,
+   "local": 0.7821
+  },
+  "Bank-C": {
+   "federated": 0.7519,
+   "local": 0.7637
+  }
+ },
+ "scale": {
+  "bytes_per_bank_per_tree": 10522406,
+  "mb_per_bank_per_model": 631.3,
+  "seconds_per_tree_3_banks": 1.14,
+  "seconds_full_model_3_banks": 73.7,
+  "note": "Upload per bank does not grow with the number of banks (each bank sends its own masked histograms). Aggregator work grows linearly with banks; bank-side compute runs in parallel.",
+  "rows_used": 76874
+ },
+ "schema": {
+  "missing_features": {
+   "bank": "Bank-B",
+   "features_missing": 41,
+   "per_bank": {
+    "Bank-A": {
+     "federated": 0.723,
+     "local": 0.7017
+    },
+    "Bank-B": {
+     "federated": 0.7937,
+     "local": 0.7654
+    },
+    "Bank-C": {
+     "federated": 0.7805,
+     "local": 0.7637
+    }
+   }
+  },
+  "noisy_measurement": {
+   "bank": "Bank-C",
+   "noise": "lognormal sigma 0.25 per value",
+   "per_bank": {
+    "Bank-A": {
+     "federated": 0.7032,
+     "local": 0.7017
+    },
+    "Bank-B": {
+     "federated": 0.7704,
+     "local": 0.7821
+    },
+    "Bank-C": {
+     "federated": 0.7835,
+     "local": 0.7322
+    }
+   }
+  }
+ },
+ "min_cell": {
+  "10": {
+   "Bank-A": {
+    "federated": 0.7371
+   },
+   "Bank-B": {
+    "federated": 0.7875
+   },
+   "Bank-C": {
+    "federated": 0.7691
+   }
+  },
+  "50": {
+   "Bank-A": {
+    "federated": 0.7186
+   },
+   "Bank-B": {
+    "federated": 0.7746
+   },
+   "Bank-C": {
+    "federated": 0.7811
+   }
+  }
+ },
+ "companion": {
+  "Bank-A": {
+   "own_model_alone": 0.7017,
+   "own_model_plus_fedshield": 0.7297
+  },
+  "Bank-B": {
+   "own_model_alone": 0.7821,
+   "own_model_plus_fedshield": 0.7781
+  },
+  "Bank-C": {
+   "own_model_alone": 0.7637,
+   "own_model_plus_fedshield": 0.7557
+  }
+ },
+ "alerts": {
+  "model": "canonical full model",
+  "threshold": 0.7967,
+  "link_threshold": 1.1764,
+  "base_rate": 0.0279,
+  "condition_1_high_risk": {
+   "alerts": 521,
+   "precision": 0.833,
+   "recall": 0.8097
+  },
+  "condition_2_cross_bank_links": {
+   "alerts": 603,
+   "precision": 0.2371,
+   "recall": 0.2668
+  },
+  "both": {
+   "alerts": 165,
+   "precision": 0.8424,
+   "recall": 0.2593
+  },
+  "either": {
+   "alerts": 959,
+   "precision": 0.4567,
+   "recall": 0.8172
+  },
+  "rejected_rule_broad_links": {
+   "alerts": 18730,
+   "precision": 0.0278,
+   "recall": 0.9701
+  },
+  "condition_3_i4c": "interface only: no public I4C data; simulated evidence would be circular"
+ },
+ "seconds": 724
+}

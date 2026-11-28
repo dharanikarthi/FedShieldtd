@@ -129,6 +129,42 @@ xychart-beta
 
 ---
 
+## 🧪 Stress tests and deployment evidence
+
+> `python -m fedshield.experiments.gaps` · real NFPC features · compact model (60 trees, depth 5) · results in `results/gaps.json`
+
+**Banks are not identical.** Federation helps most where a bank's own data is worst:
+
+| Scenario | Affected bank alone | With FedShield |
+|---|:---:|:---:|
+| Bank B lacks 41 of 174 features (different core-banking system) | 0.765 | **0.794** |
+| Bank C measures every value with ±25% error | 0.732 | **0.784** |
+
+**A small bank joins with almost no history** (`experiments/theatre.py`): with 25 labelled mules, Bank C alone reaches AUC-PR 0.526; in the network, **0.760** (with the min-cell privacy rule on).
+
+**Min-cell privacy rule.** No released histogram cell may describe fewer than *k* accounts (`FedConfig.min_cell`). At k = 10 every bank is equal or better (it also regularises); at k = 50 the cost is at most 0.009.
+
+**Three-condition alert engine** (canonical model, held-out, base rate 2.8%):
+
+| Condition | Alerts | Precision | Recall |
+|---|:---:|:---:|:---:|
+| 1 · High model risk | 521 | 83% | 81% |
+| 2 · Strong cross-bank link (rare counterparties shared with confirmed mules, top 3% of training accounts) | 603 | 24% | 27% |
+| 1 and 2 (priority tier) | 165 | **84%** | 26% |
+| 3 · Active I4C case | interface only (no public feed) | | |
+
+A broad "2+ links to confirmed mules" rule was tested and **rejected**: it fires on 97% of accounts.
+
+**As a MuleHunter add-on** (bank's own cross-fitted score as an input): +0.028 for the bank with the weakest own model, roughly neutral (−0.004, −0.008) where the own model is already strong. The network's larger value is the cross-bank signal and the cold start.
+
+**Cost.** Full model ≈ 74 s for 3 banks on a laptop. Measured upload ≈ 631 MB per bank per model as raw float64 arrays (including zeroed cells for unsampled features; float32 + sparse sending would cut ~65%). Upload per bank does not grow with network size.
+
+### Architecture vs the Stage-1 poster
+
+The Stage-1 poster described 8 layers. The built system has **7 layers, each mapped to code** (see the *Deployment & trust* page). The poster's **cluster-distribution encoder (μ, Σ, w, t, v) was replaced** by lossless federated histogram boosting, and its 0.527 / 0.542 figures were not reproduced; the numbers above supersede them. Updated one-pager: [`docs/FedShield_onepager_v2.pdf`](docs/FedShield_onepager_v2.pdf).
+
+---
+
 ## ⚙️ How it works
 
 ### System architecture

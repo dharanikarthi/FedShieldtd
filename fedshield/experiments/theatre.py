@@ -29,6 +29,7 @@ from fedshield.fl.gbdt import GBDTParams, HistParty, apply_bins, build_tree, _si
 
 P = dict(n_trees=60, max_depth=5, learning_rate=0.1, colsample=0.7, subsample=0.8, n_bins=64)
 STEP = 3
+MIN_CELL = 10            # no released histogram cell describes fewer than 10 accounts
 BUDGET = 0.02            # alert budget: top 2% of a bank's accounts get reviewed
 
 
@@ -40,8 +41,10 @@ def _bank(name, d, feats):
 
 
 def _fit(banks, feats, secure=True):
-    cfg = FedConfig(params=GBDTParams(**P), secure_agg=secure and len(banks) > 1,
-                    byzantine=False, weighting=False, eval_every=10_000)
+    multi = len(banks) > 1
+    cfg = FedConfig(params=GBDTParams(**P), secure_agg=secure and multi,
+                    byzantine=False, weighting=False, eval_every=10_000,
+                    min_cell=MIN_CELL if multi else 0)   # privacy rule on every federated release
     return federate(banks, cfg, feats)
 
 
@@ -97,7 +100,7 @@ def main():
     f = f.merge(reasons.rename(columns={"acct": "entity"}), on="entity", how="left")
     tr, te = f[f.split == "train"], f[f.split == "test"]
     names = p.banks()
-    out = {"params": P, "step": STEP, "rounds": list(range(STEP, P["n_trees"] + 1, STEP)),
+    out = {"params": P, "min_cell": MIN_CELL, "step": STEP, "rounds": list(range(STEP, P["n_trees"] + 1, STEP)),
            "banks": {}, "race": {}}
 
     # ------------------------------------------------------------------ race

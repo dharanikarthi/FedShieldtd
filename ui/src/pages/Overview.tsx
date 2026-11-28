@@ -25,7 +25,9 @@ function Kpi({ label, value, sub, tone }: { label: string; value: string; sub: s
 export default function Overview() {
   const [s, setS] = useState<any>();
   const [t, setT] = useState<any>();
+  const [sim, setSim] = useState<any>();
   useEffect(() => {
+    get("/simulator").then(setSim).catch(() => {});
     get("/summary").then(setS).catch(() => {});
     get("/theatre").then(setT).catch(() => {});
   }, []);
@@ -67,13 +69,13 @@ export default function Overview() {
 
       {/* KPIs */}
       <section className="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
-        <Kpi label="Customer records shared" value="0" tone="#12a150" sub="Only masked gradient histograms cross bank lines" />
+        <Kpi label="More mules caught" value={sim?.summary ? `+${sim.summary.caught_by_fed_missed_by_local - sim.summary.caught_by_local_missed_by_fed}` : "—"} tone="#12a150"
+          sub={sim?.summary ? `net, on held-out accounts: ${sim.summary.caught_by_fed_missed_by_local} found that each bank's own model missed, ${sim.summary.caught_by_local_missed_by_fed} lost` : ""} />
         <Kpi label="Detection quality (AUC-PR)" value={fed ? fed.fed_own_auprc_mean.toFixed(3) : "—"}
           sub={fed ? `vs ${fed.central_overall_auprc.toFixed(3)} if all data were pooled — ${(100 * fed.fed_own_auprc_mean / fed.central_overall_auprc).toFixed(1)}% of the ceiling` : ""} />
         <Kpi label="Small bank, day one" value={cold ? `${cold.local.at(-1).toFixed(2)} → ${cold.federated.at(-1).toFixed(2)}` : "—"} tone="var(--c-brand)"
           sub={cold ? `A co-op bank with only ${cold.labelled_mules} known mules, alone vs in the network` : ""} />
-        <Kpi label="Top 1% of alerts" value={fm ? `${Math.round(fm.precision_at_1pct * 100)}%` : "—"}
-          sub="are confirmed mules — a short, high-quality review queue" />
+        <Kpi label="Customer records shared" value="0" sub={fm ? `Only masked summaries move. ${Math.round(fm.precision_at_1pct * 100)}% of the top 1% of alerts are confirmed mules.` : "Only masked summaries move."} />
       </section>
 
       <div className="grid lg:grid-cols-[1.25fr_1fr] gap-6">

@@ -184,7 +184,13 @@ class HistParty:
         ids = np.asarray([n for n in node_ids if n < len(remap)], dtype=np.int64)
         remap[ids] = np.searchsorted(np.asarray(node_ids), ids)
         slot = np.where(self.node >= 0, remap[np.maximum(self.node, 0)], -1).astype(np.int32)
+        self._last_slot, self._last_k = slot, k          # reused by count_histograms (min-cell rule)
         return _hist_kernel(self.B, slot, self.g, self.h, k, self.nb)
+
+    def count_histograms(self):
+        """Row counts per (node, feature, bin) for the most recent request; sent masked like G/H."""
+        one = np.ones(len(self.y))
+        return _hist_kernel(self.B, self._last_slot, one, one, self._last_k, self.nb)[..., 0]
 
     def apply_splits(self, splits):
         """splits: {node: (feat, thr, left, right)}"""

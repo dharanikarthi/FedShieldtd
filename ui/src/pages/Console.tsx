@@ -4,7 +4,7 @@ import { get, inr, pct, post, session } from "../api";
 import FlowGraph from "../components/FlowGraph";
 import { axis, Legend, ScoreBar, Section, Tier, tooltipStyle } from "../components/ui";
 
-type Alert = { account_id: string; score: number; threshold: number; model: string; tier: string; bank: string; state: string; window: [string, string] | null; status?: string; ground_truth: number };
+type Alert = { account_id: string; score: number; threshold: number; model: string; tier: string; bank: string; state: string; window: [string, string] | null; status?: string; ground_truth: number; conditions?: string[]; at_risk?: number };
 
 export default function Console() {
   const bank = session()?.bank ?? "";
@@ -59,14 +59,16 @@ export default function Console() {
         </div>
         <div className="card overflow-hidden">
           <div className="p-3 border-b border-line flex items-center gap-2">
-            <h3 className="text-sm font-semibold">Alert queue</h3>
-            <span className="text-xs text-ink-muted">held-out test accounts</span>
+            <div>
+              <h3 className="text-sm font-semibold">Work queue</h3>
+              <span className="text-[11px] text-ink-muted">ordered by conditions met, then ₹ still at risk</span>
+            </div>
             <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search account…"
               className="ml-auto bg-page border border-line rounded-md px-2 py-1 text-sm w-36 outline-none focus:border-ink-muted" />
           </div>
           <div className="max-h-[calc(100vh-290px)] overflow-y-auto">
             <table className="data w-full">
-              <thead className="sticky top-0 bg-surface"><tr><th>Account</th><th>Risk</th><th>Tier</th></tr></thead>
+              <thead className="sticky top-0 bg-surface"><tr><th>Account</th><th>Risk</th><th className="text-right">₹ at risk</th></tr></thead>
               <tbody>
                 {shown.map((a) => (
                   <tr key={a.account_id} onClick={() => setSel(a.account_id)}
@@ -74,9 +76,13 @@ export default function Console() {
                     <td>
                       <div className="font-medium">{a.account_id}</div>
                       <div className="text-[11px] text-ink-muted">{a.state}{a.status ? ` · ${a.status}` : ""}</div>
+                      <div className="flex gap-1 mt-1">
+                        {a.conditions?.includes("high_risk") && <span className="text-[10px] px-1.5 py-px rounded bg-critical/10 text-critical">High risk</span>}
+                        {a.conditions?.includes("cross_bank") && <span className="text-[10px] px-1.5 py-px rounded bg-brand/10 text-brand">Cross-bank links</span>}
+                      </div>
                     </td>
-                    <td><ScoreBar v={a.score} thr={thr} /></td>
-                    <td><Tier tier={a.tier} /></td>
+                    <td><ScoreBar v={a.score} thr={thr} /><div className="mt-1"><Tier tier={a.tier} /></div></td>
+                    <td className="text-right text-sm tabular-nums">{a.at_risk ? inr(a.at_risk) : "—"}</td>
                   </tr>
                 ))}
               </tbody>
@@ -136,8 +142,8 @@ function AccountView({ id, onAction }: { id: string; onAction: () => void }) {
         </div>
         <div className="ml-auto text-right">
           <div className="label">Consortium registry</div>
-          <div className="text-sm mt-1">{reg.reg_cp_flagged ? `${reg.reg_cp_flagged} linked counterparties` : "no hits"}</div>
-          {reg.reg_ip_shared_mule > 0 && <div className="text-xs text-ink-2"><span style={{ color: "#ec835a" }}>▲</span> device shared with a confirmed mule</div>}
+          <div className="text-sm mt-1">{reg.strong_link ? "Strong cross-bank link" : "No strong link"}</div>
+          <div className="text-xs text-ink-2">{reg.strong_link ? <><span style={{ color: "#ec835a" }}>▲</span> shares rare counterparties with mules confirmed at other banks (top 3%)</> : "rare-counterparty overlap below the top-3% line"}</div>
         </div>
       </div>
 
