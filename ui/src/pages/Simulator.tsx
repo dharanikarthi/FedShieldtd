@@ -133,6 +133,8 @@ export default function Simulator() {
       <Lane title="Today: each bank alone" sub="Each bank's own model, trained only on its own accounts" hops={hops} mode="local" step={step} />
       <Lane title="With FedShield" sub="Same banks, same accounts. Each model has learned from the whole network." hops={hops} mode="fed" step={step} />
 
+      <RealChain />
+
       <section className="card p-5 text-sm text-ink-2 leading-relaxed">
         <div className="font-medium text-ink mb-1 flex items-center gap-2"><Icon name="check" className="text-good" />What is real here</div>
         Each hop is a <b>real held-out mule account</b> from NFPC Phase-2 (shown hashed) that its own bank's model scored below the alert
@@ -141,5 +143,102 @@ export default function Simulator() {
         <div className="mt-2 text-xs text-ink-muted">On the full held-out set, FedShield caught 37 mules that the banks' own models missed, and missed 6 that they caught (net +31).</div>
       </section>
     </div>
+  );
+}
+
+// ------------------------------------------------------------------ real chain (IBM AMLworld)
+const BANKS5 = ["Bank-A", "Bank-B", "Bank-C", "Bank-D", "Bank-E"];
+const C5: Record<string, string> = { "Bank-A": "#3987e5", "Bank-B": "#d95926", "Bank-C": "#199e70", "Bank-D": "#9a5bd6", "Bank-E": "#c98a00" };
+
+function RealChain() {
+  const [c, setC] = useState<any>();
+  const [mode, setMode] = useState<"local" | "fed">("local");
+  useEffect(() => { get("/aml_chains").then(setC).catch(() => setC(null)); }, []);
+  if (c === undefined) return null;
+  if (c === null) return (
+    <section className="card p-5 text-sm text-ink-2">Real-chain evidence not generated yet: run <code>python -m fedshield.experiments.aml_chains</code>.</section>
+  );
+  const sc = c.showcase;
+  const W = 760, lanes = sc ? sc.banks : [];
+  const laneY = (b: string) => 40 + lanes.indexOf(b) * 62;
+  const H = 40 + Math.max(1, lanes.length) * 62;
+  // place nodes left→right by first appearance in the time-ordered transfers
+  const order: string[] = [];
+  sc?.edges.forEach((e: any) => { [e.src, e.dst].forEach((n: string) => { if (!order.includes(n)) order.push(n); }); });
+  sc?.nodes.forEach((n: any) => { if (!order.includes(n.id)) order.push(n.id); });
+  const byId: Record<string, any> = Object.fromEntries((sc?.nodes ?? []).map((n: any) => [n.id, n]));
+  const x = (id: string) => 70 + (order.indexOf(id) / Math.max(1, order.length - 1)) * (W - 140);
+  const flagged = (n: any) => (mode === "local" ? n.local_score >= n.local_thr : n.fed_score >= n.fed_thr);
+  const pct1 = (v: number) => (v < 0.05 ? `${(v * 100).toFixed(2)}%` : `${Math.round(v * 100)}%`);
+
+  return (
+    <section className="card p-6">
+      <div className="flex flex-wrap items-start gap-4">
+        <div className="flex-1 min-w-[280px]">
+          <div className="label">Real data · IBM AMLworld (synthetic bank network, labelled laundering)</div>
+          <h2 className="text-lg font-semibold mt-1">Real laundering chains cross banks. Does anyone catch them?</h2>
+          <p className="text-sm text-ink-2 mt-1">A chain is a connected group of laundering transfers. We kept the {c.chains_evaluated.toLocaleString("en-IN")} chains that span 3 or more of {c.institutions} banks, and judged only accounts whose labels no model ever saw.</p>
+        </div>
+        <div className="inline-flex rounded-md border border-line overflow-hidden text-sm self-start" role="group" aria-label="Detection mode">
+          <button onClick={() => setMode("local")} className={`px-3 py-1.5 ${mode === "local" ? "bg-[#d95926] text-white" : "hover:bg-raised"}`}>Each bank alone</button>
+          <button onClick={() => setMode("fed")} className={`px-3 py-1.5 ${mode === "fed" ? "bg-brand text-white" : "hover:bg-raised"}`}>FedShield + registry</button>
+        </div>
+      </div>
+
+      <div className="grid sm:grid-cols-3 gap-3 mt-4">
+        {[["Chains interrupted", c.chains_interrupted, "at least one held-out account in the chain flagged"],
+          ["Chain accounts flagged", c.chain_accounts_flagged, "share of held-out chain accounts flagged"],
+          ["False-alarm rate", c.false_alarm_rate, "held-out clean accounts flagged"]].map(([l, v, sub]: any) => (
+          <div key={l} className="rounded-lg border border-line p-3">
+            <div className="label">{l}</div>
+            <div className="text-2xl font-semibold mt-1" style={{ color: mode === "local" ? "#d95926" : "var(--c-brand)" }}>
+              {pct1(mode === "local" ? v.each_bank_alone : v.fedshield_registry)}
+            </div>
+            <div className="text-[11px] text-ink-muted">{sub} · other mode {pct1(mode === "local" ? v.fedshield_registry : v.each_bank_alone)}</div>
+          </div>
+        ))}
+      </div>
+
+      {sc && (
+        <div className="mt-5">
+          <div className="text-sm font-medium">One real chain across {sc.banks.length} banks, transfers in time order</div>
+          <div className="overflow-x-auto">
+            <svg viewBox={`0 0 ${W} ${H}`} className="w-full min-w-[640px] h-auto" role="img" aria-label="Laundering chain across banks">
+              {lanes.map((b: string) => (
+                <g key={b}>
+                  <line x1={60} y1={laneY(b)} x2={W - 20} y2={laneY(b)} stroke="var(--c-line)" />
+                  <text x={8} y={laneY(b) + 4} fontSize={12} fill={C5[b] ?? "var(--c-ink)"} fontWeight={600}>{b}</text>
+                </g>
+              ))}
+              {sc.edges.map((e: any, i: number) => byId[e.src] && byId[e.dst] && (
+                <line key={i} x1={x(e.src)} y1={laneY(byId[e.src].bank)} x2={x(e.dst)} y2={laneY(byId[e.dst].bank)}
+                  stroke="var(--c-muted)" strokeOpacity={0.6} markerEnd="url(#arr)" />
+              ))}
+              <defs><marker id="arr" viewBox="0 0 10 10" refX="10" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path d="M0,0L10,5L0,10z" fill="var(--c-muted)" /></marker></defs>
+              {sc.nodes.map((n: any) => {
+                const f = flagged(n);
+                if (!n.held_out) return (
+                  <g key={n.id} transform={`translate(${x(n.id)},${laneY(n.bank)})`}>
+                    <circle r={4} fill="var(--c-axis)"><title>{n.id} · {n.bank} · training account (label used in training; not scored)</title></circle>
+                  </g>
+                );
+                return (
+                  <g key={n.id} transform={`translate(${x(n.id)},${laneY(n.bank)})`}>
+                    <circle r={f ? 11 : 8} fill={f ? "#d03b3b" : "var(--c-surface)"} stroke={f ? "#d03b3b" : C5[n.bank]} strokeWidth={2} style={{ transition: "all .4s" }}>
+                      <title>{n.id} · {n.bank} · own model {pct1(n.local_score)} (thr {pct1(n.local_thr)}) · FedShield {pct1(n.fed_score)} (thr {pct1(n.fed_thr)}){n.held_out ? " · held-out" : ""}</title>
+                    </circle>
+                  </g>
+                );
+              })}
+            </svg>
+          </div>
+          <p className="text-[11px] text-ink-muted mt-1">Large circles = held-out accounts (red = flagged). Small grey dots = training accounts, whose labels were used for training, so they are not scored here. Hover a circle for both scores.</p>
+        </div>
+      )}
+      <p className="text-xs text-ink-muted mt-3">
+        Chains FedShield interrupts and no single bank does: <b>{c.chains_only_fedshield_interrupts}</b>; the reverse: <b>{c.chains_only_local_interrupts}</b>.
+        Banks are 5 groups of AMLworld bank IDs; each sees only transfers touching its own accounts.
+      </p>
+    </section>
   );
 }

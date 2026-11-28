@@ -442,6 +442,15 @@ def simulator():
     return {"hops": hops, "summary": dc.get("summary", {})}
 
 
+@app.get("/api/aml_chains")
+def aml_chains():
+    """Real cross-bank laundering chains on IBM AMLworld (experiments/aml_chains.py)."""
+    p = RESULTS / "aml_chains.json"
+    if not p.exists():
+        raise HTTPException(404, "run: python -m fedshield.experiments.aml_chains")
+    return json.loads(p.read_text())
+
+
 @app.get("/api/gaps")
 def gaps():
     """Stress tests and deployment numbers (experiments/gaps.py)."""

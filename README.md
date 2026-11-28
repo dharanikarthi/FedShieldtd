@@ -133,6 +133,16 @@ xychart-beta
 
 > `python -m fedshield.experiments.gaps` · real NFPC features · compact model (60 trees, depth 5) · results in `results/gaps.json`
 
+**Real cross-bank laundering chains** (IBM AMLworld HI-Small, `experiments/aml_chains.py`): 5 institutions, each seeing only transfers that touch its own accounts. Of 202 laundering chains spanning 3+ banks, judged only on held-out accounts:
+
+| | Each bank alone | FedShield + registry |
+|---|:---:|:---:|
+| Chains interrupted (≥ 1 account flagged) | 60% | **81%** |
+| Chain accounts flagged | 36% | **54%** |
+| False alarms on clean accounts | 0.47% | **0.31%** |
+
+45 chains are interrupted only by FedShield; 4 only by the banks alone. Account-level AUC-PR: banks alone 0.50–0.56, FedShield + registry **0.589**, pooled data 0.588.
+
 **Banks are not identical.** Federation helps most where a bank's own data is worst:
 
 | Scenario | Affected bank alone | With FedShield |

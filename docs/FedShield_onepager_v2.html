@@ -73,9 +73,10 @@
 
 <div class="grid2">
   <div>
-    <h2>Stress tests (real features, compact model)</h2>
+    <h2>Stress tests and cross-bank evidence</h2>
     <table>
       <tr><th>Scenario</th><th>Affected bank: alone → FedShield</th></tr>
+      <tr><td><b>Real cross-bank chains</b> (IBM AMLworld, 202 chains over 3+ banks): chains interrupted</td><td>60% → <span class="good">81%</span>, false alarms 0.47% → 0.31%</td></tr>
       <tr><td>Bank B lacks 41 of 174 features</td><td>0.765 → <span class="good">0.794</span></td></tr>
       <tr><td>Bank C measures every value ±25%</td><td>0.732 → <span class="good">0.784</span></td></tr>
       <tr><td>Poisoning bank, gates off → on</td><td><span class="bad">0.028</span> → <span class="good">0.774</span></td></tr>
@@ -102,7 +103,7 @@
     </ul>
     <h2>Honest limits</h2>
     <ul>
-      <li>Banks are simulated by splitting one dataset; stress tests above probe real-world differences.</li>
+      <li>NFPC banks are simulated by splitting one dataset; AMLworld (synthetic but with real linked transfers across institutions) and the stress tests probe the cross-bank case.</li>
       <li>EFRM / AML / I4C feeds are interfaces; no public data exists, so no results are claimed from them.</li>
       <li>Differential privacy is costly at this scale (AUC-PR ≈ 0.2 at ε 16–64); reported, not hidden.</li>
       <li>As a MuleHunter add-on, lift is clear for weaker own models and neutral where the own model is strong.</li>
